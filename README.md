@@ -1,46 +1,15 @@
-# Getting Started with Create React App
+# Dongbaek
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 1. Reason
 
-## Available Scripts
+**회사생활을 시작하고 나에게는 외적으로 많은 변화**가 일어났다. **변하는 것을 싫어하는 나는 외부의 변화에 같이 변화**할 수 밖에 없었고, 그렇게 **어릴 때의 순수함을 잃고 있는 나를 발견**했다.
 
-In the project directory, you can run:
+작년에 나는 **폴라로이드 사진기를 자주 들고 다녔다.** 디지털 카메라에는 담을 수 없는 **순수함**을 가지고 있었고, 필터 카메라를 기다리기에는 **인내심이 부족한** 나에게는 **딱 맞는 사진기** 였기 때문이다.
 
-### `yarn start`
+**폴라로이드로 많은 사물과 사람들을 담아냈던 것** 같다. 그러면서 **작은 것들과 인연의 소중함을 많이 느끼게 되었다.** 그것들을 찍을때 **나는 누구보다 진심을 다 해 담아내려고 노력했었기 때문**이다. 아직 **나에게 남아있는 순수함이 있다면 이것들을 이야기 할 것** 같다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![Untitled](Dongbaek%2020c2fcc110754d419ddae93d4d74cc7a/Untitled.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+project dongbaek은 **폴라로이드로 무언가를 담아내면서 느낀 나의 순수한 하루(Pure One Day)**에 대한 프로젝트이다. 해당 프로젝트명은 **익선동의 “동백양과점"이라는 카페의 이름에서 영감**을 받았다. 이 날을 기점으로 **폴라로이드로 무언가를 담아내기 시작**했었다.
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+> **“순수했던 어느 하루, My Pure One Day” From.Dongbaek**
