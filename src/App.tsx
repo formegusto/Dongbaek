@@ -14,14 +14,12 @@ function App() {
 
 const CaptureWrapper = styled.div`
   display: flex;
+
+  align-items: center;
   flex-direction: column;
 
-  width: 300px;
+  width: 900px;
   height: 220px;
-
-  & > button {
-    margin: 208px 0 0;
-  }
 `;
 
 const CubeWrapper = styled.div`
