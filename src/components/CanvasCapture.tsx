@@ -1,16 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import testImage from "../assets/test.png";
 
 function CanvasCapture() {
-  const captureBox = React.useRef<HTMLDivElement>(null);
+  const refCaptureImg = React.useRef<HTMLImageElement>(null);
   const refCanvas = React.useRef<HTMLCanvasElement>(null);
 
   const onCapture = React.useCallback(() => {
     if (refCanvas && refCanvas.current) {
-      if (captureBox && captureBox.current) {
+      if (refCaptureImg && refCaptureImg.current) {
         const ctx = refCanvas.current.getContext("2d");
 
-        ctx?.drawImage(captureBox.current as any, 0, 0, 300, 200);
+        ctx?.drawImage(refCaptureImg.current as any, 0, 0, 300, 200);
         const data = refCanvas.current.toDataURL("image/png");
 
         console.log(data);
@@ -21,7 +22,7 @@ function CanvasCapture() {
   return (
     <>
       <Block>
-        <Target ref={captureBox}>캡처본</Target>
+        <Target ref={refCaptureImg} src={testImage} />
         <Canvas ref={refCanvas} width={300} height={200} />
       </Block>
       <button onClick={onCapture}>캡쳐</button>
@@ -41,7 +42,7 @@ const Block = styled.div`
 
 const Canvas = styled.canvas``;
 
-const Target = styled.div`
+const Target = styled.img`
   display: flex;
   justify-content: center;
   align-items: center;
