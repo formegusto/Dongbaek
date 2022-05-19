@@ -1,12 +1,43 @@
+import axios from "axios";
 import React from "react";
-import { blob } from "stream/consumers";
 import styled from "styled-components";
 import testImage from "../assets/test.png";
 
 function CanvasCapture() {
   const refCaptureImg = React.useRef<HTMLImageElement>(null);
   const refCanvas = React.useRef<HTMLCanvasElement>(null);
+  const [imgBlob, setImgBlob] = React.useState<Blob | null>(null);
   const [imgSrc, setImgSrc] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (imgBlob) {
+      console.log(imgBlob);
+    }
+  }, [imgBlob]);
+
+  const onSubmit = React.useCallback(async () => {
+    if (imgBlob) {
+      const formData = new FormData();
+
+      formData.append("image", imgBlob);
+
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/dongbaek",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log(res);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [imgBlob]);
 
   const onCapture = React.useCallback(() => {
     if (refCanvas && refCanvas.current) {
@@ -14,11 +45,9 @@ function CanvasCapture() {
 
       ctx?.drawImage(refCaptureImg.current as any, 0, 0, 300, 200);
       refCanvas.current.toBlob((blob) => {
-        if (blob) {
-          console.log(blob);
-          setImgSrc(URL.createObjectURL(blob));
-        }
-      });
+        setImgBlob(blob);
+        if (blob) setImgSrc(URL.createObjectURL(blob));
+      }, "image/png");
     }
   }, []);
 
@@ -29,13 +58,23 @@ function CanvasCapture() {
         <Canvas ref={refCanvas} width={300} height={200} />
         {imgSrc && <Drawing src={imgSrc} />}
       </Block>
-      <button onClick={onCapture}>캡쳐</button>
+      <ButtonBlock>
+        <button onClick={onCapture}>캡쳐</button>
+        {imgBlob && <button onClick={onSubmit}>전송</button>}
+      </ButtonBlock>
     </>
   );
 }
 
 const Block = styled.div`
   position: relative;
+`;
+
+const ButtonBlock = styled.div`
+  display: flex;
+
+  flex-direction: row;
+  justify-content: center;
 `;
 
 const Canvas = styled.canvas``;

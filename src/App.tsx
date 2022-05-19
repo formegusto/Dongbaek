@@ -1,15 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import CanvasCapture from "./components/CanvasCapture";
+import CountComponent from "./components/CountComponent";
+// import CanvasCapture from "./components/CanvasCapture";
 // import Carousel from "./components/Carousel";
 // import Cube from "./components/Cube";
 
 function App() {
-  return (
-    <CaptureWrapper>
-      <CanvasCapture />
-    </CaptureWrapper>
-  );
+  return <CountComponent />;
 }
 
 const CaptureWrapper = styled.div`
