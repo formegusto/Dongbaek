@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import CountComponent from "./components/CountComponent";
+import AuthContainer from "./containers/AuthContainer";
 // import CanvasCapture from "./components/CanvasCapture";
 // import Carousel from "./components/Carousel";
 // import Cube from "./components/Cube";
 
 function App() {
-  return <CountComponent />;
+  return <AuthContainer />;
 }
 
 const CaptureWrapper = styled.div`
