@@ -1,9 +1,15 @@
-import axios from "axios";
+import { inject, observer } from "mobx-react";
 import React from "react";
 import styled from "styled-components";
 import testImage from "../assets/test.png";
+import RootStore from "../store";
+import DongbaekStore from "../store/dongbaek";
 
-function CanvasCapture() {
+type Props = {
+  store?: DongbaekStore;
+};
+
+function CanvasCapture({ store }: Props) {
   const refCaptureImg = React.useRef<HTMLImageElement>(null);
   const refCanvas = React.useRef<HTMLCanvasElement>(null);
   const [imgBlob, setImgBlob] = React.useState<Blob | null>(null);
@@ -19,25 +25,12 @@ function CanvasCapture() {
     if (imgBlob) {
       const formData = new FormData();
 
+      formData.append("title", "Test");
       formData.append("image", imgBlob);
 
-      try {
-        const res = await axios.post(
-          "http://localhost:8080/dongbaek",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        console.log(res);
-      } catch (err) {
-        console.error(err);
-      }
+      store?.post(formData);
     }
-  }, [imgBlob]);
+  }, [imgBlob, store]);
 
   const onCapture = React.useCallback(() => {
     if (refCanvas && refCanvas.current) {
@@ -95,4 +88,6 @@ const Target = styled.img`
   box-sizing: border-box;
 `;
 
-export default CanvasCapture;
+export default inject((store: RootStore) => ({
+  store: store.dongbaek,
+}))(observer(CanvasCapture));
