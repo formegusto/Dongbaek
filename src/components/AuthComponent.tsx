@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Assets from "../assets";
 import { Mode } from "../containers/AuthContainer";
 import { ScreenWrapper } from "../styles/Wrapper";
@@ -10,12 +10,36 @@ type Props = {
 };
 
 function AuthComponent({ mode, changeMode }: Props) {
+  const refDongbaek = React.useRef<HTMLImageElement>(null);
+  const refAuthForm = React.useRef<HTMLFormElement>(null);
+  const [viewAuth, setViewAuth] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (refDongbaek && refDongbaek.current) {
+      refDongbaek.current.addEventListener("animationend", () => {
+        if (refAuthForm && refAuthForm.current) {
+          setTimeout(() => {
+            refAuthForm.current!.style.width = "350px";
+            refAuthForm.current!.style.overflowX = "visible";
+          }, 300);
+          setTimeout(() => {
+            setViewAuth(true);
+          }, 800);
+        }
+      });
+    }
+  }, []);
+
   return (
     <ScreenWrapper flex>
       <AuthWrapper>
         <Logo>
           <div className="flash">
-            <img src={Assets["DongbaekMiniX3"]} alt="dongbaekmini" />
+            <img
+              src={Assets["DongbaekMiniX3"]}
+              alt="dongbaekmini"
+              ref={refDongbaek}
+            />
           </div>
           <div className="main">
             <span className="dong">동</span>
@@ -27,7 +51,7 @@ function AuthComponent({ mode, changeMode }: Props) {
             pt.2 polaroid
           </div>
         </Logo>
-        <AuthForm>
+        <AuthForm ref={refAuthForm} isView={viewAuth}>
           <Input type="text" name="username" placeholder="아이디" />
           <Input type="password" name="password" placeholder="비밀번호" />
           <ButtonGroup>
@@ -54,6 +78,30 @@ function AuthComponent({ mode, changeMode }: Props) {
     </ScreenWrapper>
   );
 }
+
+const AniFlash = keyframes`
+  0% {
+    transform: translateY(0);
+  } 100% {
+    transform: translateY(-40px);
+  }
+`;
+
+const AniDongbaek = keyframes`
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  } 60% {
+    transform: scale(0);
+    opacity: 0;
+  } 80% {
+    transform: scale(1.15);
+    opacity: 1;
+  } 100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+`;
 
 const ModeButton = styled.li<{ isActive: boolean }>`
   font-size: 12px;
@@ -166,18 +214,34 @@ const Input = styled.input`
   }
 `;
 
-const AuthForm = styled.form`
+const AuthForm = styled.form<{ isView: boolean }>`
   position: relative;
   display: flex;
   align-items: flex-end;
   flex-direction: column;
   margin: 48px 0 0 16px;
-  width: 350px;
-  overflow-x: visible;
+  /* width: 350px; */
+  width: 0px;
+  overflow-x: hidden;
+  /* overflow-x: visible; */
+  transition: 0.5s;
+  transform-origin: 100% 100%;
 
   & > * {
     border-bottom: 2px solid rgba(255, 255, 255, 0.3);
   }
+
+  ${(props) =>
+    props.isView
+      ? css`
+          transform: scaleX(1);
+          transform-origin: 100% 0%;
+          opacity: 1;
+        `
+      : css`
+          transform: scaleX(0);
+          opacity: 0;
+        `}
 
   & > input[name="username"] {
     width: 418px;
@@ -206,15 +270,17 @@ const Logo = styled.div`
     width: 120px;
     height: 40px;
 
-    transform: translateY(-40px);
+    animation: ${AniFlash} 0.35s linear forwards;
 
     & > img {
       position: absolute;
-      top: 0;
+      top: -36px;
       left: calc(50% - 43.44px);
 
       width: 86.88px;
-      transform: translateY(-36px);
+
+      transform-origin: 50% 50%;
+      animation: ${AniDongbaek} 1.5s linear forwards;
     }
   }
 
