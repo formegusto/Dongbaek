@@ -9,3 +9,10 @@ export const postDongbaek = (data: FormData) =>
       "Content-Type": "multipart/form-data",
     },
   });
+
+export const getDongbaekList = () =>
+  client.get(`${basePATH}`, {
+    headers: {
+      Authorization: localStorage.getItem("token")!,
+    },
+  });
