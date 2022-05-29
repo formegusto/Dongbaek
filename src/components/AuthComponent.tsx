@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import Assets from "../assets";
 import { Mode } from "../containers/AuthContainer";
 import { ScreenWrapper } from "../styles/Wrapper";
 
@@ -13,6 +14,9 @@ function AuthComponent({ mode, changeMode }: Props) {
     <ScreenWrapper flex>
       <AuthWrapper>
         <Logo>
+          <div className="flash">
+            <img src={Assets["DongbaekMiniX3"]} alt="dongbaekmini" />
+          </div>
           <div className="main">
             <span className="dong">동</span>
             <span className="baek">백</span>
@@ -52,6 +56,7 @@ function AuthComponent({ mode, changeMode }: Props) {
 }
 
 const ModeButton = styled.li<{ isActive: boolean }>`
+  font-size: 12px;
   position: absolute;
 
   top: calc(50% - 12px);
@@ -95,8 +100,6 @@ const ModeList = styled.ul`
   display: flex;
   color: #fff;
   margin: 0 8px 0 0;
-
-  font-size: 12px;
 `;
 
 const Shutter = styled.button`
@@ -164,6 +167,7 @@ const Input = styled.input`
 `;
 
 const AuthForm = styled.form`
+  position: relative;
   display: flex;
   align-items: flex-end;
   flex-direction: column;
@@ -185,10 +189,38 @@ const AuthForm = styled.form`
 `;
 
 const Logo = styled.div`
-  background-color: #121212;
+  position: relative;
   color: #fff;
+  overflow-y: visible;
+
+  & > .flash {
+    position: absolute;
+
+    top: 0;
+    left: 15px;
+
+    border-width: 2px 2px 0px 2px;
+    border-style: solid;
+    border-color: #ffffff;
+    border-radius: 8px 8px 0px 0px;
+    width: 120px;
+    height: 40px;
+
+    transform: translateY(-40px);
+
+    & > img {
+      position: absolute;
+      top: 0;
+      left: calc(50% - 43.44px);
+
+      width: 86.88px;
+      transform: translateY(-36px);
+    }
+  }
 
   & > .main {
+    position: relative;
+    background-color: #121212;
     font-weight: bold;
 
     & > * {
@@ -218,6 +250,8 @@ const Logo = styled.div`
 const AuthWrapper = styled.div`
   display: flex;
   flex-direction: row;
+
+  overflow-y: visible;
 `;
 
 export default AuthComponent;
