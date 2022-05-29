@@ -6,11 +6,12 @@ import AuthStore from "../store/auth";
 
 type Props = {
   store?: AuthStore;
+  setStream?: (stream: MediaStream) => void;
 };
 
 export type Mode = "sign-in" | "sign-up";
 
-function AuthContainer({ store }: Props) {
+function AuthContainer({ store, setStream }: Props) {
   const [mode, setMode] = React.useState<Mode>("sign-in");
   const [loading, setLoading] = React.useState<boolean>(false);
   const [success, setSuccess] = React.useState<boolean>(false);
@@ -26,10 +27,19 @@ function AuthContainer({ store }: Props) {
       setLoading(loading);
       setTimeout(() => {
         setLoading(false);
+
+        navigator.mediaDevices
+          .getUserMedia({
+            video: true,
+          })
+          .then((stream: MediaStream) => {
+            setStream!(stream);
+          })
+          .catch(console.log);
         setSuccess(true);
       }, 2000);
     },
-    []
+    [setStream]
   );
 
   return (
@@ -45,4 +55,5 @@ function AuthContainer({ store }: Props) {
 
 export default inject((store: RootStore) => ({
   store: store.auth,
+  setStream: store.ui.setStream,
 }))(observer(AuthContainer));

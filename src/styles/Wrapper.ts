@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 type Props = {
   flex?: boolean;
+  fixed?: boolean;
 };
 
 export const ScreenWrapper = styled.div<Props>`
@@ -17,5 +18,13 @@ export const ScreenWrapper = styled.div<Props>`
       display: flex;
       justify-content: center;
       align-items: center;
+    `}
+
+  ${(props) =>
+    props.fixed &&
+    css`
+      position: fixed;
+      top: 0;
+      left: 0;
     `}
 `;

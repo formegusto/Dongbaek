@@ -40,7 +40,7 @@ function AuthComponent({
   }, []);
 
   return (
-    <ScreenWrapper flex>
+    <ScreenWrapper flex fixed>
       <AuthWrapper>
         <Logo>
           <div className="flash">
@@ -75,7 +75,11 @@ function AuthComponent({
           ref={refAuthForm}
           isView={viewAuth}
           onSubmit={
-            loading ? (e) => e.preventDefault() : (e) => changeLoading(e, true)
+            loading
+              ? (e) => {
+                  e.preventDefault();
+                }
+              : (e) => changeLoading(e, true)
           }
         >
           <Input type="text" name="username" placeholder="아이디" />
