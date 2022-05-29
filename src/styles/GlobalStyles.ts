@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
     html {
-        background-color: #444;
+        background-color: #121212;
     }
     html, body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -49,6 +49,11 @@ const GlobalStyles = createGlobalStyle`
     table {
         border-collapse: collapse;
         border-spacing: 0;
+    }
+
+    * {
+        /* font-family: 'Nanum Pen Script', cursive; */
+        font-family: 'Noto Sans KR', sans-serif !important;
     }
 `;
 

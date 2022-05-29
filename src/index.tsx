@@ -5,14 +5,17 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import RootStore from "./store";
 import GlobalStyles from "./styles/GlobalStyles";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <Provider {...new RootStore()}>
-    <GlobalStyles />
-    <App />
+    <Router>
+      <GlobalStyles />
+      <App />
+    </Router>
   </Provider>
 );
 
