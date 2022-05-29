@@ -7,9 +7,18 @@ import { ScreenWrapper } from "../styles/Wrapper";
 type Props = {
   mode: Mode;
   changeMode: (mode: Mode) => void;
+  loading: boolean;
+  changeLoading: (e: React.FormEvent, loading: boolean) => void;
+  success: boolean;
 };
 
-function AuthComponent({ mode, changeMode }: Props) {
+function AuthComponent({
+  mode,
+  changeMode,
+  loading,
+  changeLoading,
+  success,
+}: Props) {
   const refDongbaek = React.useRef<HTMLImageElement>(null);
   const refAuthForm = React.useRef<HTMLFormElement>(null);
   const [viewAuth, setViewAuth] = React.useState<boolean>(false);
@@ -35,23 +44,40 @@ function AuthComponent({ mode, changeMode }: Props) {
       <AuthWrapper>
         <Logo>
           <div className="flash">
-            <img
-              src={Assets["DongbaekMiniX3"]}
-              alt="dongbaekmini"
-              ref={refDongbaek}
-            />
+            {!viewAuth && (
+              <img
+                className="general-dongbaek"
+                src={Assets["DongbaekMiniX3"]}
+                alt="dongbaekmini"
+                ref={refDongbaek}
+              />
+            )}
+            {success && (
+              <img
+                className="success-dongbaek"
+                src={Assets["DongbaekMiniX3"]}
+                alt="dongbaekmini"
+                ref={refDongbaek}
+              />
+            )}
           </div>
           <div className="main">
             <span className="dong">동</span>
             <span className="baek">백</span>
           </div>
           <div className="sub">
-            GustoRoom Web SymbolProject
+            GustoRoom Web Symbol Project
             <br />
             pt.2 polaroid
           </div>
         </Logo>
-        <AuthForm ref={refAuthForm} isView={viewAuth}>
+        <AuthForm
+          ref={refAuthForm}
+          isView={viewAuth}
+          onSubmit={
+            loading ? (e) => e.preventDefault() : (e) => changeLoading(e, true)
+          }
+        >
           <Input type="text" name="username" placeholder="아이디" />
           <Input type="password" name="password" placeholder="비밀번호" />
           <ButtonGroup>
@@ -71,7 +97,7 @@ function AuthComponent({ mode, changeMode }: Props) {
                 회원가입
               </ModeButton>
             </ModeList>
-            <Shutter type="submit" />
+            <Shutter type="submit" loading={loading} />
           </ButtonGroup>
         </AuthForm>
       </AuthWrapper>
@@ -87,7 +113,20 @@ const AniFlash = keyframes`
   }
 `;
 
-const AniDongbaek = keyframes`
+const AniSuccessDongbaek = keyframes`
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  } 50% {
+    transform: scale(1.15);
+    opacity: 1;
+  } 100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+`;
+
+const AniGeneralDongbaek = keyframes`
   0% {
     transform: scale(0);
     opacity: 0;
@@ -100,6 +139,14 @@ const AniDongbaek = keyframes`
   } 100% {
     transform: scale(1.25);
     opacity: 0;
+  }
+`;
+
+const AniShutter = keyframes`
+  0% {
+    transform: rotateZ(0deg);
+  } 100% {
+    transform: rotateZ(360deg);
   }
 `;
 
@@ -150,7 +197,7 @@ const ModeList = styled.ul`
   margin: 0 8px 0 0;
 `;
 
-const Shutter = styled.button`
+const Shutter = styled.button<{ loading: boolean }>`
   position: relative;
 
   width: 32px;
@@ -160,13 +207,6 @@ const Shutter = styled.button`
   border: 1px solid #fff;
 
   background-color: transparent;
-  cursor: pointer;
-
-  &:hover {
-    &::after {
-      opacity: 0.5;
-    }
-  }
 
   &::after {
     content: "";
@@ -174,14 +214,40 @@ const Shutter = styled.button`
 
     width: 26px;
     height: 26px;
-    transition: 0.3s;
 
     top: calc(50% - 13px);
     left: calc(50% - 13px);
 
     background-color: #fff;
     border-radius: 13px;
+    box-sizing: border-box;
   }
+
+  ${(props) =>
+    props.loading
+      ? css`
+          &::after {
+            background-color: transparent;
+            border: none;
+
+            border-right: 2px solid rgba(255, 255, 255, 0.7);
+            border-top: 2px solid rgba(255, 255, 255, 0.7);
+            animation: ${AniShutter} 0.75s infinite linear;
+          }
+        `
+      : css`
+          cursor: pointer;
+
+          &::after {
+            transition: 0.3s;
+          }
+
+          &:hover {
+            &::after {
+              opacity: 0.5;
+            }
+          }
+        `}
 `;
 
 const ButtonGroup = styled.div`
@@ -234,12 +300,9 @@ const AuthForm = styled.form<{ isView: boolean }>`
   ${(props) =>
     props.isView
       ? css`
-          transform: scaleX(1);
-          transform-origin: 100% 0%;
           opacity: 1;
         `
       : css`
-          transform: scaleX(0);
           opacity: 0;
         `}
 
@@ -270,7 +333,7 @@ const Logo = styled.div`
     width: 120px;
     height: 40px;
 
-    animation: ${AniFlash} 0.35s linear forwards;
+    animation: ${AniFlash} 0.3s linear forwards;
 
     & > img {
       position: absolute;
@@ -280,7 +343,14 @@ const Logo = styled.div`
       width: 86.88px;
 
       transform-origin: 50% 50%;
-      animation: ${AniDongbaek} 1.5s linear forwards;
+      animation: ${AniGeneralDongbaek} 1.5s linear forwards;
+    }
+
+    & > .general-dongbaek {
+      animation: ${AniGeneralDongbaek} 1.5s linear forwards;
+    }
+    & > .success-dongbaek {
+      animation: ${AniSuccessDongbaek} 1s linear forwards;
     }
   }
 
