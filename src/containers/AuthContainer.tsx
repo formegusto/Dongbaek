@@ -1,5 +1,6 @@
 import { inject, observer } from "mobx-react";
 import React from "react";
+import AuthComponent from "../components/AuthComponent";
 import RootStore from "../store";
 import AuthStore from "../store/auth";
 
@@ -7,21 +8,16 @@ type Props = {
   store?: AuthStore;
 };
 
+export type Mode = "sign-in" | "sign-up";
+
 function AuthContainer({ store }: Props) {
-  React.useEffect(() => {
-    store?.signIn();
-  }, [store]);
+  const [mode, setMode] = React.useState<Mode>("sign-in");
 
-  React.useEffect(() => {
-    if (store?.token) store.check();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store?.token]);
+  const changeMode = React.useCallback((mode: Mode) => {
+    setMode(mode);
+  }, []);
 
-  React.useEffect(() => {
-    if (store?.auth) console.log(store.auth);
-  }, [store?.auth]);
-
-  return <></>;
+  return <AuthComponent mode={mode} changeMode={changeMode} />;
 }
 
 export default inject((store: RootStore) => ({
