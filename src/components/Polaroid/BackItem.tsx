@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { BsFilm } from "react-icons/bs";
 import FilterObserver from "./FilterObserver";
+import { Link } from "react-router-dom";
 
 function BackItem() {
   return (
@@ -13,7 +14,7 @@ function BackItem() {
             <span>FILTER</span>
           </Filter>
         </ButtonGroup>
-        <Memory href="#memory">
+        <Memory to="/memory">
           <BsFilm size={24} />
           <span>MEMORY</span>
         </Memory>
@@ -96,7 +97,7 @@ const Filter = styled.a`
   cursor: pointer;
 `;
 
-const Memory = styled.a`
+const Memory = styled(Link)`
   color: #333;
 
   display: flex;
