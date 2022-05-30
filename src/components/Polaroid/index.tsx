@@ -27,7 +27,7 @@ const Block = styled.div`
   width: 500px;
   height: 340px;
   transform-origin: 50% 50%;
-  transform: rotateY(-45deg) rotateX(-35deg);
+  /* transform: rotateY(-45deg) rotateX(-35deg); */
 
   & > div:not(.flash) {
     box-shadow: inset 0 0 60px #ccc;
