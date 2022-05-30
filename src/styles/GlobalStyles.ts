@@ -55,6 +55,10 @@ const GlobalStyles = createGlobalStyle`
         /* font-family: 'Nanum Pen Script', cursive; */
         font-family: 'Noto Sans KR', sans-serif !important;
     }
+
+    a {
+        text-decoration: none;
+    }
 `;
 
 export default GlobalStyles;

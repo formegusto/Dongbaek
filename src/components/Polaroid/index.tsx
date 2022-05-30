@@ -1,13 +1,19 @@
 import styled from "styled-components";
+import BackItem from "./BackItem";
+import Lens from "./Lens";
 
 //Body
 function Polaroid() {
   return (
     <Wrapper>
       <Block>
-        <Front className="front" />
+        <Front className="front">
+          <Lens />
+        </Front>
         <Front className="front inner" />
-        <Front className="back" />
+        <Front className="back">
+          <BackItem />
+        </Front>
         <Front className="back inner" />
         <Horizontal className="left" />
         <Horizontal className="left inner" />
@@ -35,10 +41,13 @@ const Block = styled.div`
   width: 500px;
   height: 340px;
   transform-origin: 50% 50%;
+  transform: rotateY(180deg);
 
   & > div {
-    box-shadow: inset 0 0 60px #f0f0f0;
+    box-shadow: inset 0 0 60px #ccc;
     background-color: #fff;
+    border-radius: 16px;
+    box-sizing: border-box;
   }
 
   & > .inner {
@@ -53,7 +62,6 @@ const Vertical = styled.div`
   left: 0;
   width: 500px;
   height: 120px;
-  border-radius: 16px;
 
   &.top {
     transform: rotateX(-90deg) translateZ(-60px);
@@ -80,7 +88,6 @@ const Horizontal = styled.div`
   left: 0;
   width: 340px;
   height: 120px;
-  border-radius: 16px;
 
   &.left {
     transform: rotateZ(90deg) rotateX(90deg) translateY(-60px);
@@ -109,10 +116,13 @@ const Front = styled.div`
 
   width: 500px;
   height: 340px;
-  border-radius: 16px;
 
   &.front {
     transform: translateZ(60px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   &.front.inner {
     transform: translateZ(59px);
@@ -120,6 +130,11 @@ const Front = styled.div`
 
   &.back {
     transform: translateZ(-60px);
+    padding: 32px 24px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   &.back.inner {
     transform: translateZ(-59px);

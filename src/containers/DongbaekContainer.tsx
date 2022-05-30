@@ -12,14 +12,14 @@ type Props = {
 function DongbaekContainer({ stream }: Props) {
   React.useEffect(() => {
     if (stream) {
-      // const elStream = document.getElementById(
-      //   "dongbaek-stream"
-      // ) as HTMLVideoElement;
-      // if (elStream) elStream.srcObject = stream;
+      const elStream = document.getElementById(
+        "dongbaek-stream"
+      ) as HTMLVideoElement;
+      if (elStream) elStream.srcObject = stream;
     }
   }, [stream]);
 
-  return <DongbaekComponent />;
+  return stream ? <DongbaekComponent /> : <></>;
 }
 
 export default inject((store: RootStore) => ({
