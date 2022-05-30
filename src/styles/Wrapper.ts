@@ -12,6 +12,8 @@ export const ScreenWrapper = styled.div<Props>`
   min-width: 800px;
   min-height: 700px;
 
+  overflow-y: scroll;
+
   ${(props) =>
     props.flex &&
     css`

@@ -70,7 +70,7 @@ const Horizontal = styled.div`
     transform-origin: 0% 0%;
   }
   &.left.inner {
-    transform: rotateY(90deg) translateX(-25px);
+    transform: rotateY(90deg) translateX(-30px) translateZ(5px);
     transform-origin: 0% 0%;
   }
 

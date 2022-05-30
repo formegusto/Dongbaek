@@ -6,7 +6,7 @@ import Flash from "./Flash";
 function Polaroid() {
   return (
     <Wrapper>
-      <Block>
+      <Block id="polaroid-block">
         <Body />
         <Flash />
       </Block>
