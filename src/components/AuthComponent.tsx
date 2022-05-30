@@ -52,6 +52,8 @@ function AuthComponent({
                 ref={refDongbaek}
               />
             )}
+          </div>
+          <div className="main">
             {success && (
               <img
                 className="success-dongbaek"
@@ -60,8 +62,6 @@ function AuthComponent({
                 ref={refDongbaek}
               />
             )}
-          </div>
-          <div className="main">
             <span className="dong">동</span>
             <span className="baek">백</span>
           </div>
@@ -353,9 +353,6 @@ const Logo = styled.div`
     & > .general-dongbaek {
       animation: ${AniGeneralDongbaek} 1.5s linear forwards;
     }
-    & > .success-dongbaek {
-      animation: ${AniSuccessDongbaek} 1s linear forwards;
-    }
   }
 
   & > .main {
@@ -363,21 +360,30 @@ const Logo = styled.div`
     background-color: #121212;
     font-weight: bold;
 
+    & > .success-dongbaek {
+      position: absolute;
+      top: -30px;
+      left: -40px;
+      animation: ${AniSuccessDongbaek} 1s linear forwards;
+    }
     & > * {
       display: inline-block;
     }
 
     & > .dong {
+      position: relative;
       font-size: 164px;
     }
 
     & > .baek {
+      position: relative;
       font-size: 64px;
       transform: translateY(8px);
     }
   }
 
   & > .sub {
+    position: relative;
     font-weight: 100;
     font-size: 12px;
     line-height: 150%;
