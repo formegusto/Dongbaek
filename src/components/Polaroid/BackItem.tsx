@@ -3,9 +3,16 @@ import { BsFilm } from "react-icons/bs";
 import FilterObserver from "./FilterObserver";
 import { Link } from "react-router-dom";
 import React from "react";
+import { inject, observer } from "mobx-react";
+import RootStore from "../../store";
+import DongbaekStore from "../../store/dongbaek";
 // import FilterModal from "./FilterModal";
 
-function BackItem() {
+type Props = {
+  dongbaekStore?: DongbaekStore;
+};
+
+function BackItem({ dongbaekStore }: Props) {
   const refVideo = React.useRef<HTMLVideoElement>(null);
 
   const onCapture = React.useCallback(() => {
@@ -15,9 +22,13 @@ function BackItem() {
 
     if (canvas && refVideo && refVideo.current) {
       const ctx = canvas.getContext("2d");
-      ctx?.drawImage(refVideo.current, 0, 0, 294, 150);
+      ctx?.drawImage(refVideo.current, 0, 0, 294, 175);
+
+      canvas.toBlob((blob) => {
+        dongbaekStore?.capture(blob);
+      }, "image/png");
     }
-  }, []);
+  }, [dongbaekStore]);
 
   return (
     <Block>
@@ -150,4 +161,6 @@ const Monitor = styled.div`
   }
 `;
 
-export default BackItem;
+export default inject((store: RootStore) => ({
+  dongbaekStore: store.dongbaek,
+}))(observer(BackItem));
