@@ -2,14 +2,28 @@ import styled from "styled-components";
 import { BsFilm } from "react-icons/bs";
 import FilterObserver from "./FilterObserver";
 import { Link } from "react-router-dom";
+import React from "react";
 // import FilterModal from "./FilterModal";
 
 function BackItem() {
+  const refVideo = React.useRef<HTMLVideoElement>(null);
+
+  const onCapture = React.useCallback(() => {
+    const canvas = document.getElementById(
+      "capture-canvas"
+    ) as HTMLCanvasElement;
+
+    if (canvas && refVideo && refVideo.current) {
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(refVideo.current, 0, 0, 294, 150);
+    }
+  }, []);
+
   return (
     <Block>
       <ButtonBlock>
         <ButtonGroup>
-          <Shutter />
+          <Shutter onClick={onCapture} />
           <Filter to="/filter">
             <FilterObserver />
             <span>FILTER</span>
@@ -21,7 +35,7 @@ function BackItem() {
         </Memory>
       </ButtonBlock>
       <Monitor>
-        <video autoPlay id="dongbaek-stream" />
+        <video ref={refVideo} autoPlay id="dongbaek-stream" />
         {/* <FilterModal /> */}
       </Monitor>
     </Block>

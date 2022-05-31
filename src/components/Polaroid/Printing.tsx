@@ -3,11 +3,18 @@ import styled from "styled-components";
 function Printing() {
   return (
     <Block className="printing">
-      <Paper />
+      <Paper>
+        <CaptureCanvas id="capture-canvas" />
+      </Paper>
       <PrintingShape />
     </Block>
   );
 }
+
+const CaptureCanvas = styled.canvas`
+  width: 304px;
+  height: 220px;
+`;
 
 const Block = styled.div`
   position: absolute;
@@ -21,12 +28,18 @@ const Block = styled.div`
 `;
 
 const Paper = styled.div`
+  display: flex;
+  justify-content: center;
+
   width: 340px;
   height: 272px;
 
+  box-sizing: border-box;
   background-color: #fff;
 
-  /* transform: translateY(269px); */
+  padding: 24px 0 0;
+
+  transform: translateY(269px);
   border-radius: 16px;
 `;
 
