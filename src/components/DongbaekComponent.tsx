@@ -10,12 +10,12 @@ function DongbaekComponent() {
     ) as HTMLDivElement;
 
     if (elPolaroid) {
-      window.addEventListener("scroll", (e) => {
+      window.onscroll = (e) => {
         const maxScroll = document.body.scrollHeight - window.innerHeight;
         const rate = window.scrollY / maxScroll;
 
         elPolaroid.style.transform = "rotateY(" + -360 * rate + "deg)";
-      });
+      };
     }
   }, []);
 

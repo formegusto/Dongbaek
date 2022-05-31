@@ -38,6 +38,7 @@ function AuthContainer({ store, setStream }: Props) {
             setStream!(stream);
             setSuccess(true);
 
+            localStorage.setItem("token", "test");
             navigate("/");
           })
           .catch(console.log);

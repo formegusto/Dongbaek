@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { BsFilm } from "react-icons/bs";
 import FilterObserver from "./FilterObserver";
 import { Link } from "react-router-dom";
+// import FilterModal from "./FilterModal";
 
 function BackItem() {
   return (
@@ -9,7 +10,7 @@ function BackItem() {
       <ButtonBlock>
         <ButtonGroup>
           <Shutter />
-          <Filter href="#filter">
+          <Filter to="/filter">
             <FilterObserver />
             <span>FILTER</span>
           </Filter>
@@ -21,6 +22,7 @@ function BackItem() {
       </ButtonBlock>
       <Monitor>
         <video autoPlay id="dongbaek-stream" />
+        {/* <FilterModal /> */}
       </Monitor>
     </Block>
   );
@@ -87,7 +89,7 @@ const Shutter = styled.button`
   }
 `;
 
-const Filter = styled.a`
+const Filter = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,6 +115,8 @@ const Memory = styled(Link)`
 `;
 
 const Monitor = styled.div`
+  position: relative;
+
   width: 340px;
   height: 100%;
 
@@ -123,6 +127,7 @@ const Monitor = styled.div`
   padding: 24px 24px 28px;
 
   & > video {
+    position: relative;
     width: 100%;
     height: 100%;
   }
