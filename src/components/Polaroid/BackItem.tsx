@@ -124,12 +124,15 @@ const Monitor = styled.div`
   border-radius: 16px;
 
   box-sizing: border-box;
-  padding: 24px 24px 28px;
+  padding: 24px 0 0;
+
+  display: flex;
+  justify-content: center;
 
   & > video {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 340px;
+    height: 220px;
   }
 `;
 

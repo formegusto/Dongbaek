@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Body from "./Body";
 import Flash from "./Flash";
+import Printing from "./Printing";
 
 //Body
 function Polaroid() {
@@ -9,6 +10,7 @@ function Polaroid() {
       <Block id="polaroid-block">
         <Body />
         <Flash />
+        <Printing />
       </Block>
     </Wrapper>
   );
@@ -27,9 +29,9 @@ const Block = styled.div`
   width: 500px;
   height: 340px;
   transform-origin: 50% 50%;
-  /* transform: rotateY(-45deg) rotateX(-35deg); */
+  /* transform: rotateY(-45deg) rotateX(55deg); */
 
-  & > div:not(.flash) {
+  & > div:not(.flash .printing) {
     box-shadow: inset 0 0 60px #ccc;
     background-color: #fff;
     border-radius: 16px;
