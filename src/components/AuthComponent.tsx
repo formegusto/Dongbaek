@@ -2,13 +2,16 @@ import React from "react";
 import styled, { css, keyframes } from "styled-components";
 import Assets from "../assets";
 import { Mode } from "../containers/AuthContainer";
+import { Authentication } from "../store/auth/types";
 import { ScreenWrapper } from "../styles/Wrapper";
 
 type Props = {
   mode: Mode;
   changeMode: (mode: Mode) => void;
   loading: boolean;
-  changeLoading: (e: React.FormEvent, loading: boolean) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  auth: Authentication;
+  onSubmit: (e: React.FormEvent) => void;
   success: boolean;
 };
 
@@ -16,7 +19,9 @@ function AuthComponent({
   mode,
   changeMode,
   loading,
-  changeLoading,
+  onChange,
+  auth,
+  onSubmit,
   success,
 }: Props) {
   const refDongbaek = React.useRef<HTMLImageElement>(null);
@@ -79,12 +84,24 @@ function AuthComponent({
               ? (e) => {
                   e.preventDefault();
                 }
-              : (e) => changeLoading(e, true)
+              : onSubmit
           }
         >
-          <Input type="text" name="username" placeholder="아이디" />
-          <Input type="password" name="password" placeholder="비밀번호" />
-          <ButtonGroup>
+          <Input
+            type="text"
+            name="username"
+            placeholder="아이디"
+            onChange={onChange}
+            value={auth.username}
+          />
+          <Input
+            type="password"
+            name="password"
+            placeholder="비밀번호"
+            onChange={onChange}
+            value={auth.password}
+          />
+          <ButtonGroup className="button-group">
             <ModeList>
               <ModeButton
                 isActive={mode === "sign-in"}
@@ -278,10 +295,6 @@ const Input = styled.input`
 
   outline: none;
   transition: 0.3s;
-
-  &:focus {
-    border-bottom: 2px solid rgba(255, 255, 255, 1);
-  }
 `;
 
 const AuthForm = styled.form<{ isView: boolean }>`
@@ -297,8 +310,12 @@ const AuthForm = styled.form<{ isView: boolean }>`
   transition: 0.5s;
   transform-origin: 100% 100%;
 
-  & > * {
+  & > *:not(.button-group) {
     border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  & > *:not(.button-group):focus {
+    border-bottom: 2px solid rgba(255, 255, 255, 1);
   }
 
   ${(props) =>

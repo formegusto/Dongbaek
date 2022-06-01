@@ -2,26 +2,21 @@ import { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
 import API from "../../api";
 import { ResSkeleton } from "../../api/types";
-import { Auth, AuthSuccess } from "./types";
+import { Authentication, Authorization, AuthSuccess } from "./types";
 
 class AuthStore {
   token?: string;
-  auth?: Auth;
+  auth?: Authorization;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  *signIn(): Generator<
-    Promise<AxiosResponse<ResSkeleton<AuthSuccess>>>,
-    void,
-    any
-  > {
+  *signIn(
+    auth: Authentication
+  ): Generator<Promise<AxiosResponse<ResSkeleton<AuthSuccess>>>, void, any> {
     try {
-      const res = yield API["user"].signIn({
-        username: "Hello",
-        password: "1234",
-      });
+      const res = yield API["user"].signIn(auth);
 
       this.token = res.data.token;
     } catch (err) {
@@ -29,16 +24,11 @@ class AuthStore {
     }
   }
 
-  *signUp(): Generator<
-    Promise<AxiosResponse<ResSkeleton<AuthSuccess>>>,
-    void,
-    any
-  > {
+  *signUp(
+    auth: Authentication
+  ): Generator<Promise<AxiosResponse<ResSkeleton<AuthSuccess>>>, void, any> {
     try {
-      const res = yield API["user"].signUp({
-        username: "Hello",
-        password: "1234",
-      });
+      const res = yield API["user"].signUp(auth);
 
       this.token = res.data.token;
     } catch (err) {
@@ -46,7 +36,7 @@ class AuthStore {
     }
   }
 
-  *check(): Generator<Promise<AxiosResponse<ResSkeleton<Auth>>>, void, any> {
+  *check(): Generator<Promise<ResSkeleton<Authorization>>, void, any> {
     try {
       if (this.token) {
         const res = yield API["user"].checkToken(this.token);
