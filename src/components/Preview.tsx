@@ -17,12 +17,14 @@ function Preview({ uiStore, dongbaekStore }: Props) {
   const onClose = React.useCallback(() => {
     uiStore?.setPreview(false);
     dongbaekStore?.clearImage();
+    setTitle("");
   }, [uiStore, dongbaekStore]);
 
   const onSubmit = React.useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       dongbaekStore?.post(title);
+      setTitle("");
       onClose();
     },
     [dongbaekStore, title, onClose]

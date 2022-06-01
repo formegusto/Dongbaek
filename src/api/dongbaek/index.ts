@@ -1,4 +1,6 @@
 import client from "../client";
+import { ResSkeleton } from "../types";
+import { ResGetDongbaekList } from "./types";
 
 const basePATH = "/dongbaek";
 
@@ -11,7 +13,7 @@ export const postDongbaek = (data: FormData) =>
   });
 
 export const getDongbaekList = () =>
-  client.get(`${basePATH}`, {
+  client.get<any, ResSkeleton<ResGetDongbaekList>>(`${basePATH}`, {
     headers: {
       Authorization: localStorage.getItem("token")!,
     },
