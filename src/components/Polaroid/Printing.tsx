@@ -49,7 +49,7 @@ function Printing({ dongbaekStore, uiStore }: Props) {
 
 const CaptureCanvas = styled.canvas`
   width: 304px;
-  height: 220px;
+  height: 200px;
 `;
 
 const Block = styled.div`
