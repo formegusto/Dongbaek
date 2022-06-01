@@ -54,6 +54,12 @@ const GlobalStyles = createGlobalStyle`
     * {
         /* font-family: 'Nanum Pen Script', cursive; */
         font-family: 'Noto Sans KR', sans-serif !important;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    *::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera*/
     }
 
     a {
