@@ -11,8 +11,14 @@ import Preview from "./components/Preview";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+const store = new RootStore();
+const token = localStorage.getItem("token");
+if (token) {
+  store.auth.initCheck(token);
+}
+
 root.render(
-  <Provider {...new RootStore()}>
+  <Provider {...store}>
     <Router>
       <GlobalStyles />
       <App />

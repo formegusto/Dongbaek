@@ -48,6 +48,11 @@ class AuthStore {
       console.error(err);
     }
   }
+
+  initCheck = (token: string) => {
+    this.token = token;
+    this.check();
+  };
 }
 
 export default AuthStore;

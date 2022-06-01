@@ -2,29 +2,33 @@ import { inject, observer } from "mobx-react";
 import React from "react";
 import DongbaekComponent from "../components/DongbaekComponent";
 import RootStore from "../store";
+import { Authorization } from "../store/auth/types";
 
 type Props = {
   setStream?: (stream: MediaStream) => void;
   stream?: MediaStream;
+  auth?: Authorization;
 };
 
-function DongbaekContainer({ setStream, stream }: Props) {
+function DongbaekContainer({ setStream, stream, auth }: Props) {
   React.useEffect(() => {
-    if (stream) {
-      const elStream = document.getElementById(
-        "dongbaek-stream"
-      ) as HTMLVideoElement;
-      if (elStream) elStream.srcObject = stream;
-    } else {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: true,
-        })
-        .then((stream) => {
-          setStream!(stream);
-        });
+    if (auth) {
+      if (stream) {
+        const elStream = document.getElementById(
+          "dongbaek-stream"
+        ) as HTMLVideoElement;
+        if (elStream) elStream.srcObject = stream;
+      } else {
+        navigator.mediaDevices
+          .getUserMedia({
+            video: true,
+          })
+          .then((stream) => {
+            setStream!(stream);
+          });
+      }
     }
-  }, [stream, setStream]);
+  }, [stream, setStream, auth]);
 
   return stream ? <DongbaekComponent /> : <></>;
 }
@@ -32,4 +36,5 @@ function DongbaekContainer({ setStream, stream }: Props) {
 export default inject((store: RootStore) => ({
   setStream: store.ui.setStream,
   stream: store.ui.stream,
+  auth: store.auth.auth,
 }))(observer(DongbaekContainer));

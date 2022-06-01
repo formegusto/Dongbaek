@@ -14,7 +14,8 @@ function MainPage({ auth }: Props) {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!auth) {
+    const token = localStorage.getItem("token");
+    if (!token) {
       navigate("/auth");
     }
   }, [navigate, auth]);

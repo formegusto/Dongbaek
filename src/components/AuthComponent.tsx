@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
 import Assets from "../assets";
 import { Mode } from "../containers/AuthContainer";
@@ -13,6 +14,7 @@ type Props = {
   auth: Authentication;
   onSubmit: (e: React.FormEvent) => void;
   success: boolean;
+  refDongbaek: React.RefObject<HTMLImageElement>;
 };
 
 function AuthComponent({
@@ -22,51 +24,51 @@ function AuthComponent({
   onChange,
   auth,
   onSubmit,
-  success,
+  refDongbaek,
 }: Props) {
-  const refDongbaek = React.useRef<HTMLImageElement>(null);
+  const navigate = useNavigate();
   const refAuthForm = React.useRef<HTMLFormElement>(null);
   const [viewAuth, setViewAuth] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (refDongbaek && refDongbaek.current) {
       refDongbaek.current.addEventListener("animationend", () => {
-        if (refAuthForm && refAuthForm.current) {
+        if (refDongbaek.current?.classList.contains("playing")) {
+          if (refAuthForm && refAuthForm.current) {
+            setTimeout(() => {
+              refAuthForm.current!.style.width = "350px";
+              refAuthForm.current!.style.overflowX = "visible";
+            }, 300);
+            setTimeout(() => {
+              setViewAuth(true);
+            }, 800);
+          }
+
+          refDongbaek.current.classList.remove("playing");
+        }
+
+        if (refDongbaek.current?.classList.contains("success")) {
           setTimeout(() => {
-            refAuthForm.current!.style.width = "350px";
-            refAuthForm.current!.style.overflowX = "visible";
-          }, 300);
-          setTimeout(() => {
-            setViewAuth(true);
-          }, 800);
+            navigate("/");
+          }, 100);
         }
       });
     }
-  }, []);
+  }, [refDongbaek, navigate]);
 
   return (
     <ScreenWrapper flex fixed>
       <AuthWrapper>
         <Logo>
           <div className="flash">
-            {!viewAuth && (
-              <img
-                className="general-dongbaek"
-                src={Assets["DongbaekMiniX3"]}
-                alt="dongbaekmini"
-                ref={refDongbaek}
-              />
-            )}
+            <img
+              className="playing"
+              src={Assets["DongbaekMiniX3"]}
+              alt="dongbaekmini"
+              ref={refDongbaek}
+            />
           </div>
           <div className="main">
-            {success && (
-              <img
-                className="success-dongbaek"
-                src={Assets["DongbaekMiniX3"]}
-                alt="dongbaekmini"
-                ref={refDongbaek}
-              />
-            )}
             <span className="dong">동</span>
             <span className="baek">백</span>
           </div>
@@ -367,8 +369,12 @@ const Logo = styled.div`
       animation: ${AniGeneralDongbaek} 1.5s linear forwards;
     }
 
-    & > .general-dongbaek {
+    & > .playing {
       animation: ${AniGeneralDongbaek} 1.5s linear forwards;
+    }
+
+    & > .success {
+      animation: ${AniSuccessDongbaek} 0.75s linear forwards;
     }
   }
 
@@ -377,12 +383,6 @@ const Logo = styled.div`
     background-color: #121212;
     font-weight: bold;
 
-    & > .success-dongbaek {
-      position: absolute;
-      top: -30px;
-      left: -40px;
-      animation: ${AniSuccessDongbaek} 1s linear forwards;
-    }
     & > * {
       display: inline-block;
     }

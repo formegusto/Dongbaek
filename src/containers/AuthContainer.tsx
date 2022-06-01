@@ -19,6 +19,7 @@ function AuthContainer({ store, setStream }: Props) {
     username: "",
     password: "",
   });
+  const refDongbaek = React.useRef<HTMLImageElement>(null);
   const [mode, setMode] = React.useState<Mode>("sign-in");
   const [loading, setLoading] = React.useState<boolean>(false);
   const [success, setSuccess] = React.useState<boolean>(false);
@@ -63,35 +64,23 @@ function AuthContainer({ store, setStream }: Props) {
 
   // Auth Success
   React.useEffect(() => {
-    if (store?.token) {
+    if (store?.token && loading) {
       store.check();
-      navigate("/");
-    }
-  }, [store, store?.token, navigate]);
 
-  const changeLoading = React.useCallback(
-    (e: React.FormEvent, loading: boolean) => {
-      e.preventDefault();
-      setSuccess(false);
       setTimeout(() => {
         setLoading(false);
-
-        navigator.mediaDevices
-          .getUserMedia({
-            video: true,
-          })
-          .then((stream: MediaStream) => {
-            setStream!(stream);
-            setSuccess(true);
-
-            localStorage.setItem("token", "test");
-            navigate("/");
-          })
-          .catch(console.log);
+        if (refDongbaek && refDongbaek.current) {
+          refDongbaek.current.classList.add("success");
+        }
       }, 2000);
-    },
-    [setStream, navigate]
-  );
+    }
+  }, [store, store?.token, navigate, loading]);
+
+  React.useEffect(() => {
+    if (store?.auth) {
+      navigate("/");
+    }
+  }, [store, store?.auth, navigate]);
 
   return (
     <AuthComponent
@@ -102,6 +91,7 @@ function AuthContainer({ store, setStream }: Props) {
       success={success}
       auth={auth}
       onSubmit={onSubmit}
+      refDongbaek={refDongbaek}
     />
   );
 }
