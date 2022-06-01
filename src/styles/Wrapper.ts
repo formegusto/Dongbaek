@@ -1,9 +1,17 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 type Props = {
   flex?: boolean;
   fixed?: boolean;
 };
+
+const AniScreen = keyframes`
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+`;
 
 export const ScreenWrapper = styled.div<Props>`
   width: 100vw;
@@ -13,6 +21,8 @@ export const ScreenWrapper = styled.div<Props>`
   min-height: 700px;
 
   overflow-y: scroll;
+
+  animation: ${AniScreen} 0.75s linear forwards;
 
   ${(props) =>
     props.flex &&

@@ -21,11 +21,16 @@ class DongbaekStore {
     if (imageBlob) this.image = URL.createObjectURL(imageBlob);
   };
 
-  *post(data: FormData): Generator<Promise<AxiosResponse>, void, any> {
+  *post(title: string): Generator<Promise<AxiosResponse>, void, any> {
     try {
-      const res = yield API["dongbaek"].postDongbaek(data);
+      const data = new FormData();
+      if (this.userImage) {
+        data.append("title", title);
+        data.append("image", this.userImage);
+        const res = yield API["dongbaek"].postDongbaek(data);
 
-      console.log(res.data);
+        console.log(res.data);
+      }
     } catch (err) {
       console.error(err);
     }

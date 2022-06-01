@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Assets from "../assets";
+import { ScreenWrapper } from "../styles/Wrapper";
 
 function MemoryComponent() {
   const refWrapper = React.useRef<HTMLDivElement>(null);
@@ -58,7 +59,7 @@ function MemoryComponent() {
   }, []);
 
   return (
-    <Wrapper ref={refWrapper}>
+    <ScreenWrapper ref={refWrapper} flex fixed>
       <ScrollListenr
         ref={refListener}
         src={Assets["ScrollListenerX3"]}
@@ -109,7 +110,7 @@ function MemoryComponent() {
           </PaperBlock>
         </PaperList>
       </Block>
-    </Wrapper>
+    </ScreenWrapper>
   );
 }
 
@@ -194,24 +195,6 @@ const PaperBlock = styled.div`
       /* transform: rotateX(20deg); */
     }
   }
-`;
-
-const Wrapper = styled.div`
-  perspective: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100vw;
-  height: 100vh;
-
-  min-width: 800px;
-  min-height: 700px;
-
-  background-color: #121212;
 `;
 
 const Block = styled.div`
