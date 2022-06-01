@@ -37,12 +37,11 @@ function MemoryComponent() {
 
       if (refListener && refListener.current) {
         const { top, x } = refBlock.current.getBoundingClientRect();
-        const { height, width: lWidth } =
-          refListener.current.getBoundingClientRect();
+
         const width = refBlock.current.offsetWidth;
 
-        refListener.current.style.top = top - height - 10 + "px";
-        refListener.current.style.left = x + width - lWidth + "px";
+        refListener.current.style.top = top - 128 - 10 + "px";
+        refListener.current.style.left = x + width - 129 + "px";
 
         refListener.current.style.transition = 0.25 + "s";
       }
@@ -217,7 +216,6 @@ const Wrapper = styled.div`
 
 const Block = styled.div`
   max-width: calc(100vw - 128px);
-
   overflow-x: hidden;
   white-space: nowrap;
 `;

@@ -32,7 +32,6 @@ function Printing({ dongbaekStore, uiStore }: Props) {
   }, []);
 
   React.useEffect(() => {
-    console.log(dongbaekStore?.image);
     if (dongbaekStore?.image && refPaper && refPaper.current)
       refPaper.current.classList.add("printing");
   }, [dongbaekStore?.image]);
