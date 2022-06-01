@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components";
 import RootStore from "../store";
 import DongbaekStore from "../store/dongbaek";
 import UIStore from "../store/ui";
+import { BsX, BsFilm } from "react-icons/bs";
 
 type Props = {
   uiStore?: UIStore;
@@ -11,19 +12,48 @@ type Props = {
 };
 
 function Preview({ uiStore, dongbaekStore }: Props) {
+  const [title, setTitle] = React.useState<string>("");
+
   const onClose = React.useCallback(() => {
     uiStore?.setPreview(false);
     dongbaekStore?.clearImage();
   }, [uiStore, dongbaekStore]);
 
+  const onSubmit = React.useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      dongbaekStore?.post(title);
+      onClose();
+    },
+    [dongbaekStore, title, onClose]
+  );
+
   return uiStore?.viewPreview ? (
     <Container>
-      <Close onClick={onClose} />
-      <Paper>
+      {/* <Close onClick={onClose} /> */}
+      <Close />
+      <Paper onSubmit={onSubmit}>
         {dongbaekStore?.image && (
           <img src={dongbaekStore?.image!} alt="pure one day" />
         )}
-        <input type="text" placeholder="어떤 하루 였나요?" />
+        <input
+          type="text"
+          placeholder="어떤 하루 였나요?"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <ButtonGroup>
+          <li>
+            <Button type="submit">
+              <BsFilm size={24} />
+            </Button>
+          </li>
+          <li>
+            <Button className="close" onClick={onClose}>
+              <BsX size={24} />
+            </Button>
+          </li>
+        </ButtonGroup>
       </Paper>
     </Container>
   ) : (
@@ -65,8 +95,43 @@ const Container = styled.div`
   animation: ${AniContainer} 0.75s linear forwards;
 `;
 
-const Paper = styled.div`
+const ButtonGroup = styled.ul`
+  position: absolute;
+  top: -36px;
+  right: 0;
+
+  display: flex;
+  flex-direction: row;
+
+  column-gap: 8px;
+`;
+
+const Button = styled.button`
+  background-color: transparent;
+
+  border: 1px solid #fff;
+  color: #fff;
+
+  border-radius: 100%;
+
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  transition: 0.35s;
+  &:hover {
+    color: #333;
+    background-color: #fff;
+  }
+`;
+
+const Paper = styled.form`
   position: relative;
+  overflow-x: visible;
 
   display: flex;
   justify-content: center;
