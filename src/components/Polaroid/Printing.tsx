@@ -39,12 +39,19 @@ function Printing({ dongbaekStore, uiStore }: Props) {
   return (
     <Block>
       <Paper ref={refPaper}>
-        <CaptureCanvas id="capture-canvas" />
+        <CaptureFigure className={uiStore?.filter.className}>
+          <CaptureCanvas id="capture-canvas" />
+        </CaptureFigure>
       </Paper>
       <PrintingShape />
     </Block>
   );
 }
+
+const CaptureFigure = styled.figure`
+  width: 304px;
+  height: 200px;
+`;
 
 const CaptureCanvas = styled.canvas`
   width: 304px;

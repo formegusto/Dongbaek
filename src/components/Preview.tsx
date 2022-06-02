@@ -35,9 +35,11 @@ function Preview({ uiStore, dongbaekStore }: Props) {
       {/* <Close onClick={onClose} /> */}
       <Close />
       <Paper onSubmit={onSubmit}>
-        {dongbaekStore?.image && (
-          <img src={dongbaekStore?.image!} alt="pure one day" />
-        )}
+        <figure className={uiStore?.filter.className}>
+          {dongbaekStore?.image && (
+            <img src={dongbaekStore?.image!} alt="pure one day" />
+          )}
+        </figure>
         <input
           type="text"
           placeholder="어떤 하루 였나요?"
@@ -146,13 +148,15 @@ const Paper = styled.form`
   background-color: #fff;
   border-radius: 8px;
 
-  & > img {
-    width: 330px;
-    height: 220px;
+  & > figure {
+    & > img {
+      width: 330px;
+      height: 220px;
 
-    transform: rotateY(180deg);
+      transform: rotateY(180deg);
 
-    object-fit: cover;
+      object-fit: cover;
+    }
   }
 
   & > input {

@@ -17,7 +17,7 @@ function Lens({ username }: Props) {
           d=" M  1.4888402048036085   80.98247858864082  A  98 98 0 1 1 1.4888105037727115 80.98264703241693"
         ></path>
         <text width="500" fontWeight={100} fontSize={14}>
-          <textPath xlinkHref="#lens-circle">{username}</textPath>
+          <textPath xlinkHref="#lens-circle">@ {username}</textPath>
         </text>
       </svg>
       <LensShape />

@@ -1,9 +1,9 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Assets from "../assets";
 import { Dongbaek } from "../store/dongbaek/types";
 import { ScreenWrapper } from "../styles/Wrapper";
-import { BsArrowLeftCircle } from "react-icons/bs";
+import { BsArrowLeftCircle, BsEraser } from "react-icons/bs";
 
 type Props = {
   dongbaeks?: Dongbaek[];
@@ -87,6 +87,18 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
     }
   }, [dongbaeks]);
 
+  const noticeDelete = React.useCallback(
+    (e: React.MouseEvent, isEnter: boolean) => {
+      const elNotice = e.currentTarget.nextSibling as HTMLDivElement;
+
+      if (elNotice) {
+        if (isEnter) elNotice.style.transform = "translateY(92px)";
+        else elNotice.style.transform = "";
+      }
+    },
+    []
+  );
+
   return (
     <ScreenWrapper ref={refWrapper} flex fixed>
       <BackButton ref={refBackBtn} onClick={onBack}>
@@ -103,13 +115,23 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
           {dongbaeks &&
             dongbaeks.map((dongbaek) => (
               <PaperBlock key={dongbaek._id}>
-                <div className="tong back" />
-                <div className="tong front" />
+                <div className="tong stick back" />
+                <div
+                  className="tong stick front"
+                  onMouseEnter={(e) => noticeDelete(e, true)}
+                  onMouseLeave={(e) => noticeDelete(e, false)}
+                />
+                <div className={`tong delete notice`}>
+                  <BsEraser color="#333" size={32} />
+                </div>
                 <PaperContent>
-                  <img
-                    src={`${process.env.REACT_APP_API_URL}/${dongbaek.image}`}
-                    alt={dongbaek.title}
-                  />
+                  <div className="img">
+                    <img
+                      src={`${process.env.REACT_APP_API_URL}/${dongbaek.image}`}
+                      alt={dongbaek.title}
+                    />
+                    <div />
+                  </div>
                   <input type="text" value={dongbaek.title} readOnly />
                 </PaperContent>
               </PaperBlock>
@@ -119,6 +141,20 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
     </ScreenWrapper>
   );
 }
+
+const PaperAni = keyframes`
+  0% {
+    transform: rotateZ(0);
+  } 25% {
+    transform: rotateZ(2.5deg);
+  } 50% {
+    transform: rotateZ(-2.5deg);
+  } 75% {
+    transform: rotateZ(2.5deg);
+  } 100% {
+    transform: rotateZ(0);
+  }
+`;
 
 const BackButton = styled.button`
   position: fixed;
@@ -142,6 +178,7 @@ const BackButton = styled.button`
 const PaperList = styled.div`
   position: relative;
   transform-style: preserve-3d;
+  overflow-y: visible;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -164,13 +201,35 @@ const PaperContent = styled.div`
 
   margin: 64px 0 0;
 
-  & > img,
-  .img {
+  & > .img {
+    position: relative;
+
     width: 330px;
     height: 220px;
 
-    background-color: #333;
     transform: rotateY(180deg);
+
+    & > img {
+      display: block;
+      position: relative;
+      z-index: -1;
+
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    & > div {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 330px;
+      height: 220px;
+
+      box-shadow: rgba(51, 51, 51, 0.5) 3px 3px 10px inset;
+      /* background-color: rgba(51, 51, 51, 0.3); */
+    }
   }
 
   & > input {
@@ -185,6 +244,12 @@ const PaperContent = styled.div`
     font-size: 16px;
 
     outline: none;
+  }
+
+  transform-origin: 50% 0%;
+  animation: ${PaperAni} 1s linear;
+  &:hover {
+    /* animation: ${PaperAni} 1s linear; */
   }
 `;
 
@@ -203,27 +268,42 @@ const PaperBlock = styled.div`
   & > .tong {
     position: absolute;
     top: 0;
-    left: calc(50% - 21px);
+    cursor: pointer;
 
-    width: 42px;
-    height: 80px;
-
-    border-radius: 0px 0px 16px 16px;
-
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
-    transform-origin: 50% 0%;
-
-    &.back {
-      background: #eeeeee;
-      z-index: 1;
-      /* transform: translateX(3px) rotateX(30deg); */
+    &:hover {
+      &.front {
+        transform: rotateX(30deg);
+      }
     }
 
-    &.front {
-      background-color: #fff;
+    &.notice {
       z-index: 3;
-      /* transform: rotateX(20deg); */
+
+      transition: 0.35s;
+    }
+
+    &.stick {
+      transition: 0.35s;
+      left: calc(50% - 21px);
+      width: 42px;
+      height: 80px;
+
+      border-radius: 0px 0px 16px 16px;
+
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      transform-origin: 50% 0%;
+      &.back {
+        background: #eeeeee;
+        z-index: 1;
+        /* transform: translateX(3px) rotateX(30deg); */
+      }
+
+      &.front {
+        background-color: #fff;
+        z-index: 4;
+        /* transform: rotateX(20deg); */
+      }
     }
   }
 `;
@@ -233,6 +313,7 @@ const Block = styled.div`
   max-width: calc(100vw - 128px);
   overflow-x: hidden;
   white-space: nowrap;
+  height: 390px;
 `;
 
 const ScrollListenr = styled.img`
@@ -248,8 +329,6 @@ const Line = styled.div`
 
   width: 100%;
   height: 2px;
-
-  /* width: 400vw; */
 
   background: linear-gradient(45deg, transparent 0%, #fff 100%);
 `;

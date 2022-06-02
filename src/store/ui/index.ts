@@ -20,6 +20,10 @@ class UIStore {
   setPreview = (status: boolean) => {
     this.viewPreview = status;
   };
+
+  setFilter = (filter: Filter) => {
+    this.filter = filter;
+  };
 }
 
 export default UIStore;

@@ -6,13 +6,17 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import RootStore from "../../store";
 import DongbaekStore from "../../store/dongbaek";
-// import FilterModal from "./FilterModal";
+import FilterModal from "./FilterModal";
+import UIStore from "../../store/ui";
+import { Filter as TFilter } from "../../store/ui/filters";
 
 type Props = {
   dongbaekStore?: DongbaekStore;
+  uiStore?: UIStore;
 };
 
-function BackItem({ dongbaekStore }: Props) {
+function BackItem({ dongbaekStore, uiStore }: Props) {
+  const [showFilter, setShowFilter] = React.useState<boolean>(false);
   const refVideo = React.useRef<HTMLVideoElement>(null);
 
   const onCapture = React.useCallback(() => {
@@ -22,7 +26,7 @@ function BackItem({ dongbaekStore }: Props) {
 
     if (canvas && refVideo && refVideo.current) {
       const ctx = canvas.getContext("2d");
-      ctx?.drawImage(refVideo.current, 0, 0, 294, 175);
+      ctx?.drawImage(refVideo.current, 0, 0, 304, 200);
 
       canvas.toBlob((blob) => {
         dongbaekStore?.capture(blob);
@@ -30,13 +34,22 @@ function BackItem({ dongbaekStore }: Props) {
     }
   }, [dongbaekStore]);
 
+  const changeFilterStatus = React.useCallback(
+    (status: boolean, filter?: TFilter) => {
+      if (filter) uiStore?.setFilter(filter);
+
+      setShowFilter(status);
+    },
+    [uiStore]
+  );
+
   return (
     <Block>
       <ButtonBlock>
         <ButtonGroup>
           <Shutter onClick={onCapture} />
-          <Filter to="/filter">
-            <FilterObserver />
+          <Filter onClick={() => changeFilterStatus(true)}>
+            <FilterObserver filter={uiStore?.filter} />
             <span>FILTER</span>
           </Filter>
         </ButtonGroup>
@@ -46,8 +59,10 @@ function BackItem({ dongbaekStore }: Props) {
         </Memory>
       </ButtonBlock>
       <Monitor>
-        <video ref={refVideo} autoPlay id="dongbaek-stream" />
-        {/* <FilterModal /> */}
+        <figure className={`${uiStore?.filter.className}`}>
+          <video ref={refVideo} autoPlay id="dongbaek-stream" />
+        </figure>
+        {showFilter && <FilterModal setFilter={changeFilterStatus} />}
       </Monitor>
     </Block>
   );
@@ -114,7 +129,10 @@ const Shutter = styled.button`
   }
 `;
 
-const Filter = styled(Link)`
+const Filter = styled.button`
+  background: transparent;
+  border: none;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -154,13 +172,18 @@ const Monitor = styled.div`
   display: flex;
   justify-content: center;
 
-  & > video {
-    position: relative;
-    width: 340px;
+  & > figure {
+    width: calc(340px - 48px);
     height: 220px;
+  }
+  & > figure > video {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
 `;
 
 export default inject((store: RootStore) => ({
   dongbaekStore: store.dongbaek,
+  uiStore: store.ui,
 }))(observer(BackItem));
