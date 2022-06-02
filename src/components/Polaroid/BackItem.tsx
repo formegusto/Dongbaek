@@ -36,7 +36,7 @@ function BackItem({ dongbaekStore, uiStore }: Props) {
 
   const changeFilterStatus = React.useCallback(
     (status: boolean, filter?: TFilter) => {
-      if (filter) uiStore?.setFilter(filter);
+      if (filter) uiStore?.patchConfig({ filter });
 
       setShowFilter(status);
     },

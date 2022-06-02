@@ -1,14 +1,18 @@
 import { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
+import RootStore from "..";
 import API from "../../api";
 import { ResSkeleton } from "../../api/types";
+import filters from "../ui/filters";
 import { Authentication, Authorization, AuthSuccess } from "./types";
 
 class AuthStore {
+  root: RootStore;
   token?: string;
   auth?: Authorization;
 
-  constructor() {
+  constructor(root: RootStore) {
+    this.root = root;
     makeAutoObservable(this);
   }
 
@@ -28,7 +32,10 @@ class AuthStore {
     auth: Authentication
   ): Generator<Promise<AxiosResponse<ResSkeleton<AuthSuccess>>>, void, any> {
     try {
-      const res = yield API["user"].signUp(auth);
+      const res = yield API["user"].signUp({
+        ...auth,
+        config: { filter: filters[0] },
+      });
 
       this.token = res.data.token;
     } catch (err) {
@@ -43,6 +50,8 @@ class AuthStore {
 
         this.auth = res.data.auth;
         localStorage.setItem("token", this.token);
+
+        this.root.ui.getConfig();
       }
     } catch (err) {
       console.error(err);
