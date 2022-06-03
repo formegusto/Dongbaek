@@ -5,6 +5,7 @@ import { Dongbaek } from "../../store/dongbaek/types";
 import { ScreenWrapper } from "../../styles/Wrapper";
 import { BsArrowLeftCircle } from "react-icons/bs";
 import Paper from "./Paper";
+import _ from "underscore";
 
 type Props = {
   dongbaeks?: Dongbaek[];
@@ -31,19 +32,22 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
 
   React.useEffect(() => {
     if (refBlock && refBlock.current) {
-      refBlock.current.addEventListener("scroll", (e) => {
-        const scrollWidth = refBlock.current!.scrollWidth;
-        const width = refBlock.current!.clientWidth;
+      refBlock.current.addEventListener(
+        "scroll",
+        _.throttle((e) => {
+          const scrollWidth = refBlock.current!.scrollWidth;
+          const width = refBlock.current!.clientWidth;
 
-        const maxScroll = scrollWidth - width;
-        const scrollLeft = refBlock.current!.scrollLeft;
+          const maxScroll = scrollWidth - width;
+          const scrollLeft = refBlock.current!.scrollLeft;
 
-        if (refListener && refListener.current) {
-          const rate = scrollLeft / maxScroll;
-          refListener.current.style.transform =
-            "rotateZ(" + 720 * rate + "deg)";
-        }
-      });
+          if (refListener && refListener.current) {
+            const rate = scrollLeft / maxScroll;
+            refListener.current.style.transform =
+              "rotateZ(" + 720 * rate + "deg)";
+          }
+        }, 100)
+      );
     }
   }, []);
 

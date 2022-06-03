@@ -9,6 +9,7 @@ import DongbaekStore from "../../store/dongbaek";
 import FilterModal from "./FilterModal";
 import UIStore from "../../store/ui";
 import { Filter as TFilter } from "../../store/ui/filters";
+import TimerSetting from "./TimerSetting";
 
 type Props = {
   dongbaekStore?: DongbaekStore;
@@ -53,6 +54,7 @@ function BackItem({ dongbaekStore, uiStore }: Props) {
             <span>FILTER</span>
           </Filter>
         </ButtonGroup>
+        <TimerSetting />
         <Memory to="/memory">
           <BsFilm size={24} />
           <span>MEMORY</span>
@@ -81,7 +83,6 @@ const ButtonBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
 
   flex: 1;
 

@@ -8,11 +8,13 @@ import filters, { Filter } from "./filters";
 class UIStore {
   stream?: MediaStream;
   filter: Filter;
+  timer: number;
   viewPreview: boolean;
 
   constructor() {
     makeAutoObservable(this);
 
+    this.timer = 0;
     this.filter = filters[0];
     this.viewPreview = false;
   }
@@ -34,8 +36,9 @@ class UIStore {
       const res = yield API["config"].getConfig();
 
       if (res.data.config) {
-        const { filter } = res.data.config;
+        const { filter, timer } = res.data.config;
         if (filter) this.filter = filter;
+        if (timer) this.timer = timer;
       }
     } catch (err) {
       console.error(err);

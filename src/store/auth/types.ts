@@ -6,6 +6,7 @@ export type AuthSuccess = {
 
 export type Config = {
   filter?: Filter;
+  timer?: number;
 };
 
 export type Authentication = {
