@@ -26,3 +26,16 @@ export const deleteDongbaek = (_id: string) =>
       "Content-Type": "multipart/form-data",
     },
   });
+
+export const patchDongbaek = (_id: string, title: string) =>
+  client.patch<any, ResSkeleton>(
+    `${basePATH}/${_id}`,
+    {
+      title: title,
+    },
+    {
+      headers: {
+        Authorization: localStorage.getItem("token")!,
+      },
+    }
+  );

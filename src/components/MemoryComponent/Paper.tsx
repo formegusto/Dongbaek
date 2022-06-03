@@ -6,6 +6,7 @@ import { inject } from "mobx-react";
 import RootStore from "../../store";
 import { observer } from "mobx-react-lite";
 import DongbaekStore from "../../store/dongbaek";
+import _ from "underscore";
 
 type Props = {
   dongbaekStore?: DongbaekStore;
@@ -19,11 +20,19 @@ function Paper({ dongbaekStore, dongbaek }: Props) {
   const refBlock = React.useRef<HTMLDivElement>(null);
   const refContent = React.useRef<HTMLDivElement>(null);
 
+  const debouncePatch = React.useRef<(_id: string, title: string) => void>(
+    _.debounce((_id: string, _title: string) => {
+      dongbaekStore?.patch(_id, _title);
+    }, 500)
+  );
+
   const onChangeTitle = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setTitle(e.target.value);
+      if (debouncePatch && debouncePatch.current)
+        debouncePatch.current(dongbaek._id, e.target.value);
     },
-    []
+    [dongbaek, debouncePatch]
   );
 
   const noticeDelete = React.useCallback((isEnter: boolean) => {

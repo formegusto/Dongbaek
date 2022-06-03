@@ -89,6 +89,17 @@ class DongbaekStore {
       console.error(err);
     }
   }
+
+  *patch(
+    _id: string,
+    title: string
+  ): Generator<Promise<AxiosResponse>, void, any> {
+    try {
+      yield API["dongbaek"].patchDongbaek(_id, title);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
 
 export default DongbaekStore;
