@@ -31,7 +31,7 @@ function DongbaekComponent() {
 
 const ScrollListener = styled.div`
   width: 100vw;
-  height: 2000px;
+  height: 300vh;
 `;
 
 export default DongbaekComponent;

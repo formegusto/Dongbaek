@@ -93,7 +93,7 @@ const Paper = styled.div`
 
   &.printing-end {
     transition: 0.3s;
-    transform: translateY(750px);
+    transform: translateY(100vh);
   }
 `;
 
