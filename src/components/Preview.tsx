@@ -168,7 +168,7 @@ const Paper = styled.form`
 
     border: none;
 
-    font-size: 16px;
+    font-size: 20px;
 
     outline: none;
   }

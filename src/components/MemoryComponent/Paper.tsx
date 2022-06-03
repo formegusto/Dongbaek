@@ -228,7 +228,7 @@ const PaperContent = styled.div`
 
     border: none;
 
-    font-size: 16px;
+    font-size: 20px;
 
     outline: none;
   }
