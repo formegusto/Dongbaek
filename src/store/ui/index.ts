@@ -38,7 +38,7 @@ class UIStore {
       if (res.data.config) {
         const { filter, timer } = res.data.config;
         if (filter) this.filter = filter;
-        if (timer) this.timer = timer;
+        if (timer || timer === 0) this.timer = timer;
       }
     } catch (err) {
       console.error(err);

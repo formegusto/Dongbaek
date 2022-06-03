@@ -1,22 +1,34 @@
 import { inject, observer } from "mobx-react";
+import React from "react";
 import styled from "styled-components";
 import RootStore from "../../store";
+import UIStore from "../../store/ui";
 
 type Props = {
-  timer?: number;
+  uiStore?: UIStore;
 };
 
 const TIMER_OPTINS = [0, 5, 10];
 
-function TimerSetting({ timer }: Props) {
+function TimerSetting({ uiStore }: Props) {
+  const updateTimer = React.useCallback(
+    (option: number) => {
+      if (uiStore?.patchConfig)
+        uiStore?.patchConfig({
+          timer: option,
+        });
+    },
+    [uiStore]
+  );
   return (
     <Block>
-      {TIMER_OPTINS.map((option, idx) => (
+      {TIMER_OPTINS.map((option) => (
         <button
           className={`timer-option-${option} ${
-            timer === option ? "select" : ""
+            uiStore?.timer === option ? "select" : ""
           }`}
           key={`timer-option-${option}`}
+          onClick={() => updateTimer(option)}
         >
           {option}
         </button>
@@ -79,5 +91,5 @@ const Block = styled.div`
 `;
 
 export default inject((store: RootStore) => ({
-  timer: store.ui.timer,
+  uiStore: store.ui,
 }))(observer(TimerSetting));
