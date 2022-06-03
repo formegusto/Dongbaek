@@ -29,6 +29,7 @@ const Block = styled.div`
   width: 500px;
   height: 340px;
   transform-origin: 50% 50%;
+  transition: 0.1s;
   /* transform: rotateY(-45deg) rotateX(55deg); */
 
   & > div:not(.flash .printing) {
