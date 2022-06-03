@@ -107,7 +107,9 @@ function Paper({ dongbaekStore, dongbaek }: Props) {
         className={`${dongbaek.deleteStatus ? "deleting" : ""}`}
       >
         <div className="dongbaek">
-          <figure>
+          <figure
+            className={dongbaek.filter ? `${dongbaek.filter.className}` : ""}
+          >
             <img
               src={`${process.env.REACT_APP_API_URL}/${dongbaek.image}`}
               alt={dongbaek.title}

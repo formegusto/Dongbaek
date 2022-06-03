@@ -16,7 +16,7 @@ function DongbaekComponent() {
       const rate = window.scrollY / maxScroll;
 
       elPolaroid.style.transform = "rotateY(" + -360 * rate + "deg)";
-    }, 75),
+    }, 100),
     []
   );
 
@@ -26,8 +26,7 @@ function DongbaekComponent() {
     return () => {
       window.removeEventListener("scroll", scrollThrottle);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [scrollThrottle]);
 
   return (
     <>

@@ -76,6 +76,11 @@ class DongbaekStore {
       if (this.userImage) {
         data.append("title", title);
         data.append("image", this.userImage);
+        const filter = this.root.ui.filter;
+
+        data.append("filterName", filter.name);
+        data.append("filterClass", filter.className);
+
         const res = yield API["dongbaek"].postDongbaek(data);
 
         console.log(res.data);
