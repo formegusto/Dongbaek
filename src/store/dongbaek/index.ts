@@ -1,19 +1,22 @@
 import { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
+import RootStore from "..";
 import API from "../../api";
 import { ResGetDongbaekList } from "../../api/dongbaek/types";
 import { ResSkeleton } from "../../api/types";
 import { Dongbaek } from "./types";
 
 class DongbaekStore {
+  root: RootStore;
   userImage?: Blob | null;
   image?: string | null;
   dongbaekList: Dongbaek[];
 
-  constructor() {
+  constructor(root: RootStore) {
     makeAutoObservable(this);
 
     this.dongbaekList = [];
+    this.root = root;
   }
 
   clearImage = () => {
@@ -27,11 +30,41 @@ class DongbaekStore {
     if (imageBlob) this.image = URL.createObjectURL(imageBlob);
   };
 
+  *deleteRequest(_id: string): Generator<Promise<ResSkeleton>, void, any> {
+    try {
+      yield API["dongbaek"].deleteDongbaek(_id);
+
+      // 요청 success 뜬 후에 실행시키기
+      const targetIdx = this.dongbaekList.findIndex(
+        (dongbaek) => dongbaek._id === _id
+      );
+      if (targetIdx !== -1) {
+        const copyList = [...this.dongbaekList];
+        copyList[targetIdx] = { ...copyList[targetIdx], deleteStatus: true };
+
+        this.dongbaekList = copyList;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  delete = (_id: string) => {
+    this.dongbaekList = this.dongbaekList.filter(
+      (dongbaek) => dongbaek._id !== _id
+    );
+  };
+
   *getList(): Generator<Promise<ResSkeleton<ResGetDongbaekList>>, void, any> {
     try {
       const res = yield API["dongbaek"].getDongbaekList();
 
-      this.dongbaekList = res.data.dongbaeks;
+      this.dongbaekList = (res.data.dongbaeks as Dongbaek[]).map(
+        (dongbaek) => ({
+          ...dongbaek,
+          deleteStatus: false,
+        })
+      );
     } catch (err) {
       console.error(err);
     }

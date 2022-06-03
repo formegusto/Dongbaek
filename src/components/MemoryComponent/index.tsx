@@ -86,7 +86,7 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
       if (refLine && refLine.current)
         refLine.current.style.width = width + "px";
     }
-  }, [dongbaeks]);
+  }, [dongbaeks, resizingAdjustPosition]);
 
   return (
     <ScreenWrapper ref={refWrapper} flex fixed>
@@ -140,6 +140,8 @@ const PaperList = styled.div`
 
   column-gap: 98px;
   height: 370px;
+
+  transition: 0.3s;
 `;
 
 const Block = styled.div`

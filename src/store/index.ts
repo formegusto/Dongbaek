@@ -9,7 +9,7 @@ class RootStore {
 
   constructor() {
     this.auth = new AuthStore(this);
-    this.dongbaek = new DongbaekStore();
+    this.dongbaek = new DongbaekStore(this);
     this.ui = new UIStore();
   }
 }

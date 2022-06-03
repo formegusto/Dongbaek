@@ -4,6 +4,13 @@ import { ResGetDongbaekList } from "./types";
 
 const basePATH = "/dongbaek";
 
+export const getDongbaekList = () =>
+  client.get<any, ResSkeleton<ResGetDongbaekList>>(`${basePATH}`, {
+    headers: {
+      Authorization: localStorage.getItem("token")!,
+    },
+  });
+
 export const postDongbaek = (data: FormData) =>
   client.post(`${basePATH}`, data, {
     headers: {
@@ -12,9 +19,10 @@ export const postDongbaek = (data: FormData) =>
     },
   });
 
-export const getDongbaekList = () =>
-  client.get<any, ResSkeleton<ResGetDongbaekList>>(`${basePATH}`, {
+export const deleteDongbaek = (_id: string) =>
+  client.delete<any, ResSkeleton>(`${basePATH}/${_id}`, {
     headers: {
       Authorization: localStorage.getItem("token")!,
+      "Content-Type": "multipart/form-data",
     },
   });

@@ -2,43 +2,110 @@ import styled, { keyframes } from "styled-components";
 import { Dongbaek } from "../../store/dongbaek/types";
 import { BsEraser } from "react-icons/bs";
 import React from "react";
+import { inject } from "mobx-react";
+import RootStore from "../../store";
+import { observer } from "mobx-react-lite";
+import DongbaekStore from "../../store/dongbaek";
 
 type Props = {
+  dongbaekStore?: DongbaekStore;
   dongbaek: Dongbaek;
 };
 
-function Paper({ dongbaek }: Props) {
+function Paper({ dongbaekStore, dongbaek }: Props) {
   const [title, setTitle] = React.useState<string>(dongbaek.title);
   const refErase = React.useRef<HTMLDivElement>(null);
   const refShadow = React.useRef<HTMLDivElement>(null);
+  const refBlock = React.useRef<HTMLDivElement>(null);
+  const refContent = React.useRef<HTMLDivElement>(null);
 
-  const noticeDelete = React.useCallback(
-    (e: React.MouseEvent, isEnter: boolean) => {
-      if (refErase && refErase.current && refShadow && refShadow.current) {
-        if (isEnter) {
-          refErase.current.style.transform = "translateY(" + (218 - 33) + "px)";
-          refShadow.current.style.background = "rgba(51,51,51, 0.5)";
-        } else {
-          refErase.current.style.transform = "";
-          refShadow.current.style.background = "";
-        }
-      }
+  const onChangeTitle = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTitle(e.target.value);
     },
     []
   );
 
+  const noticeDelete = React.useCallback((isEnter: boolean) => {
+    if (refErase && refErase.current && refShadow && refShadow.current) {
+      if (isEnter) {
+        refErase.current.style.transform = "translateY(" + (218 - 33) + "px)";
+        refShadow.current.style.background = "rgba(51,51,51, 0.5)";
+      } else {
+        refErase.current.style.transform = "";
+        refShadow.current.style.background = "";
+      }
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (dongbaek.deleteStatus) {
+      if (refContent && refContent.current) {
+        refContent.current.classList.add("deleting");
+      }
+    }
+  }, [dongbaek]);
+
+  React.useEffect(() => {
+    if (refContent && refContent.current) {
+      refContent.current.addEventListener(
+        "animationend",
+        (e) => {
+          if (refContent && refContent.current) {
+            if (refContent.current.classList.contains("deleting")) {
+              if (refBlock && refBlock.current) {
+                refBlock.current.classList.add("scale-down");
+              }
+            }
+          }
+          e.stopPropagation();
+        },
+        false
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (refBlock && refBlock.current) {
+      refBlock.current.addEventListener("animationend", (e) => {
+        if (refBlock && refBlock.current) {
+          if (refBlock.current.classList.contains("scale-down"))
+            dongbaekStore?.delete(dongbaek._id);
+        }
+      });
+    }
+  });
+
+  const onDelete = React.useCallback(() => {
+    dongbaekStore?.deleteRequest(dongbaek._id);
+  }, [dongbaekStore, dongbaek]);
+
   return (
-    <PaperBlock key={dongbaek._id}>
-      <div className="tong stick back" />
+    <PaperBlock key={dongbaek._id} ref={refBlock}>
       <div
-        className="tong stick front"
-        onMouseEnter={(e) => noticeDelete(e, true)}
-        onMouseLeave={(e) => noticeDelete(e, false)}
+        className={`tong stick back ${dongbaek.deleteStatus ? "deleting" : ""}`}
       />
-      <div className={`tong delete notice`} ref={refErase}>
+      <div
+        className={`tong stick front ${
+          dongbaek.deleteStatus ? "deleting" : ""
+        }`}
+        onMouseEnter={() => noticeDelete(true)}
+        onMouseLeave={() => noticeDelete(false)}
+        onClick={onDelete}
+      />
+      <div
+        className={`tong delete notice ${
+          dongbaek.deleteStatus ? "deleting" : ""
+        }`}
+        ref={refErase}
+      >
         <BsEraser color="#fff" size={32} />
       </div>
-      <PaperContent>
+      <PaperContent
+        ref={refContent}
+        className={`${dongbaek.deleteStatus ? "deleting" : ""}`}
+      >
         <div className="dongbaek">
           <figure>
             <img
@@ -48,7 +115,7 @@ function Paper({ dongbaek }: Props) {
           </figure>
           <div className="shadow" ref={refShadow} />
         </div>
-        <input type="text" value={title} />
+        <input type="text" value={title} onChange={onChangeTitle} />
       </PaperContent>
     </PaperBlock>
   );
@@ -68,7 +135,37 @@ const PaperAni = keyframes`
   }
 `;
 
+const AniDelete = keyframes`
+  0% {
+    transform: translateY(0px);
+  } 100% {
+    transform: translateY(250px);
+    opacity: 0;
+  }
+`;
+
+const AniDeleteItem = keyframes`
+  0%{
+      opacity: 1;
+  }100% {
+      opacity: 0;
+  }
+`;
+
+const AniScaleDown = keyframes`
+  from {
+    transform: translateY(250px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(250px);
+    opacity: 0;
+    width: 0;
+  }
+`;
 const PaperContent = styled.div`
+  width: 378px;
+  box-sizing: border-box;
   position: relative;
 
   display: flex;
@@ -81,6 +178,10 @@ const PaperContent = styled.div`
   border-radius: 8px;
 
   margin: 64px 0 0;
+
+  &.deleting {
+    animation: ${AniDelete} 0.25s ease-in forwards;
+  }
 
   & > .dongbaek {
     position: relative;
@@ -141,7 +242,7 @@ const PaperBlock = styled.div`
   overflow-y: visible;
   position: relative;
 
-  width: calc(330px + 48px);
+  width: 378px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -149,10 +250,18 @@ const PaperBlock = styled.div`
 
   box-sizing: border-box;
 
+  &.scale-down {
+    animation: ${AniScaleDown} 0.35s ease-in forwards;
+  }
+
   & > .tong {
     position: absolute;
     top: 0;
     cursor: pointer;
+
+    &.deleting {
+      animation: ${AniDeleteItem} 0.25s ease-in forwards;
+    }
 
     &:hover {
       &.front {
@@ -192,4 +301,6 @@ const PaperBlock = styled.div`
   }
 `;
 
-export default Paper;
+export default inject((store: RootStore) => ({
+  dongbaekStore: store.dongbaek,
+}))(observer(Paper));

@@ -17,7 +17,10 @@ function FilterModal({ setFilter }: Props) {
       </TitleBlock>
       <FilterList>
         {filters.map((filter) => (
-          <FilterSelector onClick={() => setFilter(false, filter)}>
+          <FilterSelector
+            key={filter.name}
+            onClick={() => setFilter(false, filter)}
+          >
             <figure className={filter.className}>{filter.name}</figure>
           </FilterSelector>
         ))}

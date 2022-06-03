@@ -3,4 +3,5 @@ export type Dongbaek = {
   title: string;
   image: string;
   createdAt: string;
+  deleteStatus: boolean;
 };
