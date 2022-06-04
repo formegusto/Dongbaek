@@ -1,6 +1,6 @@
 import { inject, observer } from "mobx-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AuthComponent from "../components/AuthComponent";
 import RootStore from "../store";
 import AuthStore from "../store/auth";
@@ -13,8 +13,9 @@ type Props = {
 
 export type Mode = "sign-in" | "sign-up";
 
-function AuthContainer({ store, setStream }: Props) {
+function AuthContainer({ store }: Props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [auth, setAuth] = React.useState<Authentication>({
     username: "",
     password: "",
@@ -69,6 +70,7 @@ function AuthContainer({ store, setStream }: Props) {
 
       setTimeout(() => {
         setLoading(false);
+
         if (refDongbaek && refDongbaek.current) {
           refDongbaek.current.classList.add("success");
         }
@@ -77,10 +79,23 @@ function AuthContainer({ store, setStream }: Props) {
   }, [store, store?.token, navigate, loading]);
 
   React.useEffect(() => {
+    const state = location.state as any;
+
     if (store?.auth) {
-      navigate("/");
+      if (state) {
+        const { from } = state;
+        if (from) {
+          navigate(from, {
+            state: {
+              auth: true,
+            },
+          });
+        }
+      } else {
+        navigate("/");
+      }
     }
-  }, [store, store?.auth, navigate]);
+  }, [store, store?.auth, navigate, location]);
 
   return (
     <AuthComponent

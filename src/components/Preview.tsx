@@ -13,6 +13,7 @@ type Props = {
 
 function Preview({ uiStore, dongbaekStore }: Props) {
   const [title, setTitle] = React.useState<string>("");
+  const refContent = React.useRef<HTMLDivElement>(null);
 
   const onClose = React.useCallback(() => {
     uiStore?.setPreview(false);
@@ -23,9 +24,23 @@ function Preview({ uiStore, dongbaekStore }: Props) {
   const onSubmit = React.useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      dongbaekStore?.post(title);
-      setTitle("");
-      onClose();
+
+      if (refContent && refContent.current) {
+        const tongFront = document.createElement("div");
+        const tongBack = document.createElement("div");
+
+        tongFront.className = "tong stick front";
+        tongBack.className = "tong stick back";
+
+        refContent.current.appendChild(tongFront);
+        refContent.current.appendChild(tongBack);
+
+        tongFront.addEventListener("animationend", () => {
+          dongbaekStore?.post(title);
+          setTitle("");
+          onClose();
+        });
+      }
     },
     [dongbaekStore, title, onClose]
   );
@@ -34,36 +49,97 @@ function Preview({ uiStore, dongbaekStore }: Props) {
     <Container>
       {/* <Close onClick={onClose} /> */}
       <Close />
-      <Paper onSubmit={onSubmit}>
-        <figure className={uiStore?.filter.className}>
-          {dongbaekStore?.image && (
-            <img src={dongbaekStore?.image!} alt="pure one day" />
-          )}
-        </figure>
-        <input
-          type="text"
-          placeholder="어떤 하루 였나요?"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <ButtonGroup>
-          <li>
-            <Button type="submit">
-              <BsFilm size={24} />
-            </Button>
-          </li>
-          <li>
-            <Button className="close" onClick={onClose}>
-              <BsX size={24} />
-            </Button>
-          </li>
-        </ButtonGroup>
-      </Paper>
+      <PaperContent ref={refContent}>
+        <Paper onSubmit={onSubmit}>
+          <figure className={uiStore?.filter.className}>
+            {dongbaekStore?.image && (
+              <img src={dongbaekStore?.image!} alt="pure one day" />
+            )}
+          </figure>
+          <input
+            type="text"
+            placeholder="소중한 이야기를 적어주세요."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <ButtonGroup>
+            <li>
+              <Button type="submit">
+                <BsFilm size={24} />
+              </Button>
+            </li>
+            <li>
+              <Button className="close" onClick={onClose}>
+                <BsX size={24} />
+              </Button>
+            </li>
+          </ButtonGroup>
+        </Paper>
+      </PaperContent>
     </Container>
   ) : (
     <></>
   );
 }
+
+const AniTongFront = keyframes`
+  from {
+    transform: rotateX(60deg);
+    /* opacity: 0; */
+  } to {
+    transform: rotateX(0);
+    /* opacity: 1; */
+  }
+`;
+
+const AniTongBack = keyframes`
+  from {
+    transform: translateX(3px) rotateX(-60deg);
+    /* opacity: 0; */
+  } to {
+    transform: translateX(3px) rotateX(0);
+    /* opacity: 1; */
+  }
+`;
+
+const PaperContent = styled.div`
+  position: relative;
+  overflow-x: visible;
+  perspective: 800px;
+
+  width: 378px;
+  height: 307px;
+
+  & > .tong {
+    position: absolute;
+    top: 0;
+
+    &.stick {
+      top: -64px;
+      left: calc(50% - 21px);
+      width: 42px;
+      height: 80px;
+
+      border-radius: 0px 0px 16px 16px;
+
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      transform-origin: 50% 0%;
+      &.back {
+        background: #eeeeee;
+        z-index: 1;
+        transform: translateX(3px);
+        animation: ${AniTongBack} 1s linear forwards;
+      }
+
+      &.front {
+        background-color: #fff;
+        z-index: 3;
+        animation: ${AniTongFront} 1s linear forwards;
+      }
+    }
+  }
+`;
 
 const AniContainer = keyframes`
     from {
@@ -74,7 +150,7 @@ const AniContainer = keyframes`
 `;
 
 const Close = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
 
@@ -147,6 +223,8 @@ const Paper = styled.form`
 
   background-color: #fff;
   border-radius: 8px;
+
+  z-index: 2;
 
   & > figure {
     & > img {

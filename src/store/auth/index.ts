@@ -10,10 +10,13 @@ class AuthStore {
   root: RootStore;
   token?: string;
   auth?: Authorization;
+  status: boolean;
 
   constructor(root: RootStore) {
     this.root = root;
+
     makeAutoObservable(this);
+    this.status = false;
   }
 
   *signIn(
@@ -23,6 +26,7 @@ class AuthStore {
       const res = yield API["user"].signIn(auth);
 
       this.token = res.data.token;
+      this.status = true;
     } catch (err) {
       console.error(err);
     }
@@ -38,6 +42,7 @@ class AuthStore {
       });
 
       this.token = res.data.token;
+      this.status = true;
     } catch (err) {
       console.error(err);
     }
@@ -58,6 +63,7 @@ class AuthStore {
           localStorage.setItem("token", this.token);
         }
 
+        this.status = true;
         this.root.ui.getConfig();
       }
     } catch (err) {

@@ -300,6 +300,7 @@ const PaperBlock = styled.div`
       &.back {
         background: #eeeeee;
         z-index: 1;
+        transform: translateX(3px);
         /* transform: translateX(3px) rotateX(30deg); */
       }
 

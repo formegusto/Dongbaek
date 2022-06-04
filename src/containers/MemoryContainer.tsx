@@ -17,7 +17,7 @@ function MemoryContainer({ dongbaekStore }: Props) {
   }, [dongbaekStore]);
 
   const onBack = React.useCallback(() => {
-    navigate(-1);
+    navigate("/");
   }, [navigate]);
 
   return (
