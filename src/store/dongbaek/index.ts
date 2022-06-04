@@ -81,9 +81,7 @@ class DongbaekStore {
         data.append("filterName", filter.name);
         data.append("filterClass", filter.className);
 
-        const res = yield API["dongbaek"].postDongbaek(data);
-
-        console.log(res.data);
+        yield API["dongbaek"].postDongbaek(data);
       }
     } catch (err) {
       console.error(err);

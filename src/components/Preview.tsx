@@ -14,6 +14,9 @@ type Props = {
 function Preview({ uiStore, dongbaekStore }: Props) {
   const [title, setTitle] = React.useState<string>("");
   const refContent = React.useRef<HTMLDivElement>(null);
+  const refBtnGroup = React.useRef<HTMLUListElement>(null);
+  const refPaper = React.useRef<HTMLFormElement>(null);
+  const [endAni, setEndAni] = React.useState<boolean>(false);
 
   const onClose = React.useCallback(() => {
     uiStore?.setPreview(false);
@@ -34,11 +37,17 @@ function Preview({ uiStore, dongbaekStore }: Props) {
 
         refContent.current.appendChild(tongFront);
         refContent.current.appendChild(tongBack);
-
+        dongbaekStore?.post(title);
+        setEndAni(true);
         tongFront.addEventListener("animationend", () => {
-          dongbaekStore?.post(title);
-          setTitle("");
-          onClose();
+          if (refPaper && refPaper.current) {
+            refPaper.current.classList.add("post");
+            refPaper.current.addEventListener("animationend", () => {
+              setTitle("");
+              setEndAni(false);
+              onClose();
+            });
+          }
         });
       }
     },
@@ -50,7 +59,16 @@ function Preview({ uiStore, dongbaekStore }: Props) {
       {/* <Close onClick={onClose} /> */}
       <Close />
       <PaperContent ref={refContent}>
-        <Paper onSubmit={onSubmit}>
+        <Paper
+          onSubmit={
+            !endAni
+              ? onSubmit
+              : (e) => {
+                  e.preventDefault();
+                }
+          }
+          ref={refPaper}
+        >
           <figure className={uiStore?.filter.className}>
             {dongbaekStore?.image && (
               <img src={dongbaekStore?.image!} alt="pure one day" />
@@ -62,18 +80,20 @@ function Preview({ uiStore, dongbaekStore }: Props) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <ButtonGroup>
-            <li>
-              <Button type="submit">
-                <BsFilm size={24} />
-              </Button>
-            </li>
-            <li>
-              <Button className="close" onClick={onClose}>
-                <BsX size={24} />
-              </Button>
-            </li>
-          </ButtonGroup>
+          {!endAni && (
+            <ButtonGroup ref={refBtnGroup}>
+              <li>
+                <Button type="submit">
+                  <BsFilm size={24} />
+                </Button>
+              </li>
+              <li>
+                <Button className="close" onClick={onClose}>
+                  <BsX size={24} />
+                </Button>
+              </li>
+            </ButtonGroup>
+          )}
         </Paper>
       </PaperContent>
     </Container>
@@ -129,13 +149,13 @@ const PaperContent = styled.div`
         background: #eeeeee;
         z-index: 1;
         transform: translateX(3px);
-        animation: ${AniTongBack} 1s linear forwards;
+        animation: ${AniTongBack} 0.45s linear forwards;
       }
 
       &.front {
         background-color: #fff;
         z-index: 3;
-        animation: ${AniTongFront} 1s linear forwards;
+        animation: ${AniTongFront} 0.45s linear forwards;
       }
     }
   }
@@ -147,6 +167,20 @@ const AniContainer = keyframes`
     } to {
         opacity: 1;
     }
+`;
+
+const PaperAni = keyframes`
+  0% {
+    transform: rotateZ(0);
+  } 25% {
+    transform: rotateZ(2.5deg);
+  } 50% {
+    transform: rotateZ(-2.5deg);
+  } 75% {
+    transform: rotateZ(2.5deg);
+  } 100% {
+    transform: rotateZ(0);
+  }
 `;
 
 const Close = styled.div`
@@ -161,6 +195,8 @@ const Close = styled.div`
 `;
 
 const Container = styled.div`
+  transition: 0.75s;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -249,6 +285,11 @@ const Paper = styled.form`
     font-size: 20px;
 
     outline: none;
+  }
+
+  transform-origin: 50% 0%;
+  &.post {
+    animation: ${PaperAni} 1s linear;
   }
 `;
 
