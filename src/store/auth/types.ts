@@ -17,6 +17,8 @@ export type Authentication = {
 
 export type Authorization = {
   id: string;
+
   username: string;
+  token?: string;
   config?: Config;
 };

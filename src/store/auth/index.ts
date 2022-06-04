@@ -49,7 +49,14 @@ class AuthStore {
         const res = yield API["user"].checkToken(this.token);
 
         this.auth = res.data.auth;
-        localStorage.setItem("token", this.token);
+        const newToken = res.data.token;
+
+        if (newToken) {
+          this.token = newToken;
+          localStorage.setItem("token", newToken);
+        } else {
+          localStorage.setItem("token", this.token);
+        }
 
         this.root.ui.getConfig();
       }
