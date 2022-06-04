@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
 import RootStore from "..";
 import API from "../../api";
-import { ResGetDongbaekList } from "../../api/dongbaek/types";
+import { ResGetDongbaekList, ResPatchDongbaek } from "../../api/dongbaek/types";
 import { ResSkeleton } from "../../api/types";
 import { Dongbaek } from "./types";
 
@@ -93,9 +93,21 @@ class DongbaekStore {
   *patch(
     _id: string,
     title: string
-  ): Generator<Promise<AxiosResponse>, void, any> {
+  ): Generator<Promise<ResSkeleton<ResPatchDongbaek>>, void, any> {
     try {
-      yield API["dongbaek"].patchDongbaek(_id, title);
+      const res = yield API["dongbaek"].patchDongbaek(_id, title);
+      const dongbaek = res.data.dongbaek;
+
+      // 요청 success 뜬 후에 실행시키기
+      const targetIdx = this.dongbaekList.findIndex(
+        (dongbaek) => dongbaek._id === _id
+      );
+      if (targetIdx !== -1) {
+        const copyList = [...this.dongbaekList];
+        copyList[targetIdx] = { ...dongbaek, deleteStatus: false };
+
+        this.dongbaekList = copyList;
+      }
     } catch (err) {
       console.error(err);
     }

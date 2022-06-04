@@ -1,6 +1,6 @@
 import client from "../client";
 import { ResSkeleton } from "../types";
-import { ResGetDongbaekList } from "./types";
+import { ResGetDongbaekList, ResPatchDongbaek } from "./types";
 
 const basePATH = "/dongbaek";
 
@@ -28,7 +28,7 @@ export const deleteDongbaek = (_id: string) =>
   });
 
 export const patchDongbaek = (_id: string, title: string) =>
-  client.patch<any, ResSkeleton>(
+  client.patch<any, ResSkeleton<ResPatchDongbaek>>(
     `${basePATH}/${_id}`,
     {
       title: title,
