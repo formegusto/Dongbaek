@@ -1,19 +1,16 @@
 import { inject, observer } from "mobx-react";
 import React from "react";
 import DongbaekComponent from "../components/DongbaekComponent";
-import Preview from "../components/Preview";
 import RootStore from "../store";
 import { Authorization } from "../store/auth/types";
-import DongbaekStore from "../store/dongbaek";
 
 type Props = {
   setStream?: (stream: MediaStream) => void;
   stream?: MediaStream;
   auth?: Authorization;
-  dongbaekStore?: DongbaekStore;
 };
 
-function DongbaekContainer({ setStream, stream, auth, dongbaekStore }: Props) {
+function DongbaekContainer({ setStream, stream, auth }: Props) {
   React.useEffect(() => {
     if (auth) {
       if (stream) {
@@ -36,9 +33,8 @@ function DongbaekContainer({ setStream, stream, auth, dongbaekStore }: Props) {
   return stream ? <DongbaekComponent /> : <></>;
 }
 
-export default inject((store: RootStore) => ({
+export default inject<RootStore, Props, Props, {}>((store) => ({
   setStream: store.ui.setStream,
   stream: store.ui.stream,
   auth: store.auth.auth,
-  dongbaekStore: store.dongbaek,
 }))(observer(DongbaekContainer));
