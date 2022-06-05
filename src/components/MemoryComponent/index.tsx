@@ -74,6 +74,15 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
     }
   }, []);
 
+  const resizingLine = React.useCallback(() => {
+    if (refList && refList.current) {
+      const width = refList.current.scrollWidth;
+
+      if (refLine && refLine.current)
+        refLine.current.style.width = width + "px";
+    }
+  }, []);
+
   React.useEffect(() => {
     window.addEventListener("resize", resizingAdjustPosition);
     resizingAdjustPosition();
@@ -84,13 +93,8 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
   }, [resizingAdjustPosition, dongbaeks]);
 
   React.useEffect(() => {
-    if (refList && refList.current) {
-      const width = refList.current.scrollWidth;
-
-      if (refLine && refLine.current)
-        refLine.current.style.width = width + "px";
-    }
-  }, [dongbaeks, resizingAdjustPosition]);
+    resizingLine();
+  }, [dongbaeks, resizingLine]);
 
   return (
     <ScreenWrapper ref={refWrapper} flex fixed>
@@ -107,7 +111,11 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
           <Line ref={refLine} />
           {dongbaeks &&
             dongbaeks.map((dongbaek) => (
-              <Paper dongbaek={dongbaek} key={dongbaek._id} />
+              <Paper
+                dongbaek={dongbaek}
+                key={dongbaek._id}
+                resizingLine={resizingLine}
+              />
             ))}
         </PaperList>
       </Block>

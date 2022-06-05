@@ -11,9 +11,10 @@ import _ from "underscore";
 type Props = {
   dongbaekStore?: DongbaekStore;
   dongbaek: Dongbaek;
+  resizingLine: () => void;
 };
 
-function Paper({ dongbaekStore, dongbaek }: Props) {
+function Paper({ dongbaekStore, dongbaek, resizingLine }: Props) {
   const [title, setTitle] = React.useState<string>(dongbaek.title);
   const refErase = React.useRef<HTMLDivElement>(null);
   const refShadow = React.useRef<HTMLDivElement>(null);
@@ -81,10 +82,12 @@ function Paper({ dongbaekStore, dongbaek }: Props) {
         if (refBlock && refBlock.current) {
           if (refBlock.current.classList.contains("scale-down"))
             dongbaekStore?.delete(dongbaek._id);
+          resizingLine();
         }
       });
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resizingLine]);
 
   const onDelete = React.useCallback(() => {
     dongbaekStore?.deleteRequest(dongbaek._id);
