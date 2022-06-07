@@ -78,19 +78,22 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
     if (refList && refList.current) {
       const width = refList.current.scrollWidth;
 
-      if (refLine && refLine.current)
+      if (refLine && refLine.current) {
         refLine.current.style.width = width + "px";
+        console.log(width);
+      }
     }
   }, []);
 
   React.useEffect(() => {
-    window.addEventListener("resize", resizingAdjustPosition);
+    const debounceResizing = _.debounce(resizingAdjustPosition, 200);
+    window.addEventListener("resize", debounceResizing);
     resizingAdjustPosition();
 
     return () => {
-      window.removeEventListener("resize", resizingAdjustPosition);
+      window.removeEventListener("resize", debounceResizing);
     };
-  }, [resizingAdjustPosition, dongbaeks]);
+  }, [resizingAdjustPosition, dongbaeks, resizingLine]);
 
   React.useEffect(() => {
     resizingLine();
@@ -107,21 +110,36 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
         alt="scroll-listener"
       />
       <Block ref={refBlock}>
-        <PaperList ref={refList}>
+        <PaperList className="paper list">
           <Line ref={refLine} />
-          {dongbaeks &&
-            dongbaeks.map((dongbaek) => (
-              <Paper
-                dongbaek={dongbaek}
-                key={dongbaek._id}
-                resizingLine={resizingLine}
-              />
-            ))}
+          <ListBlock ref={refList}>
+            {dongbaeks &&
+              dongbaeks.map((dongbaek) => (
+                <Paper
+                  dongbaek={dongbaek}
+                  key={dongbaek._id}
+                  resizingLine={resizingLine}
+                />
+              ))}
+          </ListBlock>
         </PaperList>
       </Block>
     </ScreenWrapper>
   );
 }
+
+const ListBlock = styled.div`
+  transform-style: preserve-3d;
+  overflow-y: visible;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  column-gap: 98px;
+  height: 370px;
+
+  transition: 0.3s;
+`;
 
 const BackButton = styled.button`
   position: fixed;
@@ -144,16 +162,6 @@ const BackButton = styled.button`
 
 const PaperList = styled.div`
   position: relative;
-  transform-style: preserve-3d;
-  overflow-y: visible;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-
-  column-gap: 98px;
-  height: 370px;
-
-  transition: 0.3s;
 `;
 
 const Block = styled.div`

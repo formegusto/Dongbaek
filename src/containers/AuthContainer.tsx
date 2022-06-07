@@ -1,6 +1,6 @@
 import { inject, observer } from "mobx-react";
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthComponent from "../components/AuthComponent";
 import RootStore from "../store";
 import AuthStore from "../store/auth";
@@ -15,7 +15,6 @@ export type Mode = "sign-in" | "sign-up";
 
 function AuthContainer({ store }: Props) {
   const navigate = useNavigate();
-  const location = useLocation();
   const [auth, setAuth] = React.useState<Authentication>({
     username: "",
     password: "",
@@ -77,25 +76,6 @@ function AuthContainer({ store }: Props) {
       }, 2000);
     }
   }, [store, store?.token, navigate, loading]);
-
-  React.useEffect(() => {
-    const state = location.state as any;
-
-    if (store?.auth) {
-      if (state) {
-        const { from } = state;
-        if (from) {
-          navigate(from, {
-            state: {
-              auth: true,
-            },
-          });
-        }
-      } else {
-        navigate("/");
-      }
-    }
-  }, [store, store?.auth, navigate, location]);
 
   React.useEffect(() => {
     if (store?.error) {

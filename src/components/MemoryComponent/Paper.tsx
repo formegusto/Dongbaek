@@ -80,9 +80,10 @@ function Paper({ dongbaekStore, dongbaek, resizingLine }: Props) {
     if (refBlock && refBlock.current) {
       refBlock.current.addEventListener("animationend", (e) => {
         if (refBlock && refBlock.current) {
-          if (refBlock.current.classList.contains("scale-down"))
+          if (refBlock.current.classList.contains("scale-down")) {
             dongbaekStore?.delete(dongbaek._id);
-          resizingLine();
+            resizingLine();
+          }
         }
       });
     }

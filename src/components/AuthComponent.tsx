@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
 import Assets from "../assets";
 import { Mode } from "../containers/AuthContainer";
@@ -34,6 +34,7 @@ function AuthComponent({
   const refAuthForm = React.useRef<HTMLFormElement>(null);
   const refShutter = React.useRef<HTMLButtonElement>(null);
   const [viewAuth, setViewAuth] = React.useState<boolean>(false);
+  const location = useLocation();
 
   React.useEffect(() => {
     if (refDongbaek && refDongbaek.current) {
@@ -53,13 +54,24 @@ function AuthComponent({
         }
 
         if (refDongbaek.current?.classList.contains("success")) {
-          setTimeout(() => {
+          const state = location.state as any;
+
+          if (state) {
+            const { from } = state;
+            if (from) {
+              navigate(from, {
+                state: {
+                  auth: true,
+                },
+              });
+            }
+          } else {
             navigate("/");
-          }, 100);
+          }
         }
       });
     }
-  }, [refDongbaek, navigate]);
+  }, [refDongbaek, navigate, location]);
 
   React.useEffect(() => {
     if (loading) {
@@ -78,16 +90,20 @@ function AuthComponent({
 
   React.useEffect(() => {
     if (refShutter && refShutter.current) {
-      refShutter.current.addEventListener("transitionend", () => {
-        if (refShutter && refShutter.current) {
-          if (refShutter.current.classList.contains("error")) {
-            refShutter.current.classList.remove("error");
-            setTimeout(() => {
-              errorCheck!();
-            }, 2000);
+      refShutter.current.addEventListener(
+        "transitionend",
+        () => {
+          if (refShutter && refShutter.current) {
+            if (refShutter.current.classList.contains("error")) {
+              refShutter.current.classList.remove("error");
+              setTimeout(() => {
+                errorCheck!();
+              }, 2000);
+            }
           }
-        }
-      });
+        },
+        false
+      );
     }
   }, [errorCheck]);
 
