@@ -15,6 +15,8 @@ type Props = {
   onSubmit: (e: React.FormEvent) => void;
   success: boolean;
   refDongbaek: React.RefObject<HTMLImageElement>;
+  error?: boolean;
+  errorCheck?: () => void;
 };
 
 function AuthComponent({
@@ -25,9 +27,12 @@ function AuthComponent({
   auth,
   onSubmit,
   refDongbaek,
+  error,
+  errorCheck,
 }: Props) {
   const navigate = useNavigate();
   const refAuthForm = React.useRef<HTMLFormElement>(null);
+  const refShutter = React.useRef<HTMLButtonElement>(null);
   const [viewAuth, setViewAuth] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -55,6 +60,36 @@ function AuthComponent({
       });
     }
   }, [refDongbaek, navigate]);
+
+  React.useEffect(() => {
+    if (loading) {
+      if (refShutter && refShutter.current) {
+        refShutter.current.classList.add("loading");
+      }
+    } else {
+      if (refShutter && refShutter.current) {
+        refShutter.current.classList.remove("loading");
+        if (error) {
+          refShutter.current.classList.add("error");
+        }
+      }
+    }
+  }, [loading, error]);
+
+  React.useEffect(() => {
+    if (refShutter && refShutter.current) {
+      refShutter.current.addEventListener("transitionend", () => {
+        if (refShutter && refShutter.current) {
+          if (refShutter.current.classList.contains("error")) {
+            refShutter.current.classList.remove("error");
+            setTimeout(() => {
+              errorCheck!();
+            }, 2000);
+          }
+        }
+      });
+    }
+  }, [errorCheck]);
 
   return (
     <ScreenWrapper flex fixed>
@@ -120,7 +155,7 @@ function AuthComponent({
                 회원가입
               </ModeButton>
             </ModeList>
-            <Shutter type="submit" loading={loading} />
+            <Shutter ref={refShutter} type="submit" />
           </ButtonGroup>
         </AuthForm>
       </AuthWrapper>
@@ -220,7 +255,7 @@ const ModeList = styled.ul`
   margin: 0 8px 0 0;
 `;
 
-const Shutter = styled.button<{ loading: boolean }>`
+const Shutter = styled.button`
   position: relative;
 
   width: 32px;
@@ -246,31 +281,40 @@ const Shutter = styled.button<{ loading: boolean }>`
     box-sizing: border-box;
   }
 
-  ${(props) =>
-    props.loading
-      ? css`
-          &::after {
-            background-color: transparent;
-            border: none;
+  &.loading {
+    &::after {
+      background-color: transparent;
+      border: none;
 
-            border-right: 2px solid rgba(255, 255, 255, 0.7);
-            border-top: 2px solid rgba(255, 255, 255, 0.7);
-            animation: ${AniShutter} 0.75s infinite linear;
-          }
-        `
-      : css`
-          cursor: pointer;
+      border-right: 2px solid rgba(255, 255, 255, 0.7);
+      border-top: 2px solid rgba(255, 255, 255, 0.7);
+      animation: ${AniShutter} 0.75s infinite linear;
+    }
+  }
 
-          &::after {
-            transition: 0.3s;
-          }
+  &.error {
+    &::after {
+      transition: 0.3s;
+      border-radius: 4px;
 
-          &:hover {
-            &::after {
-              opacity: 0.5;
-            }
-          }
-        `}
+      transform: scale(0.75);
+      transform-origin: 50% 50%;
+
+      background-color: #ff9999;
+    }
+  }
+
+  &:not(.loading, .error) {
+    cursor: pointer;
+    &::after {
+      transition: 0.3s;
+    }
+    &:hover {
+      &::after {
+        opacity: 0.5;
+      }
+    }
+  }
 `;
 
 const ButtonGroup = styled.div`

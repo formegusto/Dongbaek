@@ -97,6 +97,14 @@ function AuthContainer({ store }: Props) {
     }
   }, [store, store?.auth, navigate, location]);
 
+  React.useEffect(() => {
+    if (store?.error) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, [store?.error]);
+
   return (
     <AuthComponent
       mode={mode}
@@ -107,6 +115,8 @@ function AuthContainer({ store }: Props) {
       auth={auth}
       onSubmit={onSubmit}
       refDongbaek={refDongbaek}
+      error={store?.error}
+      errorCheck={store?.errorCheck}
     />
   );
 }

@@ -10,14 +10,19 @@ class AuthStore {
   root: RootStore;
   token?: string;
   auth?: Authorization;
-  status: boolean;
+  status?: boolean;
+  error: boolean;
 
   constructor(root: RootStore) {
     this.root = root;
 
     makeAutoObservable(this);
-    this.status = false;
+    this.error = false;
   }
+
+  errorCheck = () => {
+    this.error = false;
+  };
 
   *signIn(
     auth: Authentication
@@ -27,8 +32,11 @@ class AuthStore {
 
       this.token = res.data.token;
       this.status = true;
+      this.error = false;
     } catch (err) {
       console.error(err);
+      this.status = false;
+      this.error = true;
     }
   }
 
@@ -43,8 +51,11 @@ class AuthStore {
 
       this.token = res.data.token;
       this.status = true;
+      this.error = false;
     } catch (err) {
       console.error(err);
+      this.status = false;
+      this.error = true;
     }
   }
 
@@ -67,6 +78,8 @@ class AuthStore {
         this.root.ui.getConfig();
       }
     } catch (err) {
+      this.status = false;
+
       console.error(err);
     }
   }
