@@ -12,6 +12,7 @@ type Props = {
 function MemoryContainer({ dongbaekStore }: Props) {
   const navigate = useNavigate();
 
+  // 사용자 사진 리스트 조회
   React.useEffect(() => {
     dongbaekStore?.getList();
   }, [dongbaekStore]);

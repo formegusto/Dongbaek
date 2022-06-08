@@ -30,6 +30,7 @@ class DongbaekStore {
     if (imageBlob) this.image = URL.createObjectURL(imageBlob);
   };
 
+  // 서버로 사진 삭제 요청
   *deleteRequest(_id: string): Generator<Promise<ResSkeleton>, void, any> {
     try {
       yield API["dongbaek"].deleteDongbaek(_id);
@@ -49,12 +50,14 @@ class DongbaekStore {
     }
   }
 
+  // 삭제 애니메이션 확인용 함수
   delete = (_id: string) => {
     this.dongbaekList = this.dongbaekList.filter(
       (dongbaek) => dongbaek._id !== _id
     );
   };
 
+  // 사진 리스트 조회
   *getList(): Generator<Promise<ResSkeleton<ResGetDongbaekList>>, void, any> {
     try {
       const res = yield API["dongbaek"].getDongbaekList();
@@ -70,10 +73,12 @@ class DongbaekStore {
     }
   }
 
+  // 사진 업로드
   *post(title: string): Generator<Promise<AxiosResponse>, void, any> {
     try {
       const data = new FormData();
       if (this.userImage) {
+        // multipart/form-data 형식으로 보내야한다.
         data.append("title", title);
         data.append("image", this.userImage);
         const filter = this.root.ui.filter;
@@ -88,6 +93,7 @@ class DongbaekStore {
     }
   }
 
+  // 사진 제목 수정
   *patch(
     _id: string,
     title: string

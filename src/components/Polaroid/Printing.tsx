@@ -10,6 +10,7 @@ type Props = {
   uiStore?: UIStore;
 };
 
+// 첫 사진 촬영 시, printing 되는 애니메이션용 컴포넌트
 function Printing({ dongbaekStore, uiStore }: Props) {
   const refPaper = React.useRef<HTMLDivElement>(null);
 

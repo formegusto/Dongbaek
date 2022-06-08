@@ -11,10 +11,10 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 const store = new RootStore();
+
+// localStorage에 토큰이 있다면 사용자 인증정보를 불러옴
 const token = localStorage.getItem("token");
-if (token) {
-  store.auth.initCheck(token);
-}
+if (token) store.auth.initCheck(token);
 
 root.render(
   <Provider {...store}>

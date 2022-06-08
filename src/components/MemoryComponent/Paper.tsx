@@ -21,12 +21,12 @@ function Paper({ dongbaekStore, dongbaek, resizingLine }: Props) {
   const refBlock = React.useRef<HTMLDivElement>(null);
   const refContent = React.useRef<HTMLDivElement>(null);
 
+  // input 정보가 변화할 때의 API 요청 이벤트를 제한
   const debouncePatch = React.useRef<(_id: string, title: string) => void>(
     _.debounce((_id: string, _title: string) => {
       dongbaekStore?.patch(_id, _title);
     }, 500)
   );
-
   const onChangeTitle = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setTitle(e.target.value);
@@ -36,6 +36,7 @@ function Paper({ dongbaekStore, dongbaek, resizingLine }: Props) {
     [dongbaek, debouncePatch]
   );
 
+  // 집게 hover시, 삭제 할 것인지 물어보기 위한 애니메이션
   const noticeDelete = React.useCallback((isEnter: boolean) => {
     if (refErase && refErase.current && refShadow && refShadow.current) {
       if (isEnter) {
@@ -48,6 +49,7 @@ function Paper({ dongbaekStore, dongbaek, resizingLine }: Props) {
     }
   }, []);
 
+  // 사진 삭제 애니메이션
   React.useEffect(() => {
     if (dongbaek.deleteStatus) {
       if (refContent && refContent.current) {
@@ -55,7 +57,6 @@ function Paper({ dongbaekStore, dongbaek, resizingLine }: Props) {
       }
     }
   }, [dongbaek]);
-
   React.useEffect(() => {
     if (refContent && refContent.current) {
       refContent.current.addEventListener(
@@ -75,7 +76,6 @@ function Paper({ dongbaekStore, dongbaek, resizingLine }: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   React.useEffect(() => {
     if (refBlock && refBlock.current) {
       refBlock.current.addEventListener("animationend", (e) => {

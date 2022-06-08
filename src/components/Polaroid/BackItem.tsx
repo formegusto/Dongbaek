@@ -20,6 +20,7 @@ function BackItem({ uiStore }: Props) {
   const [showFilter, setShowFilter] = React.useState<boolean>(false);
   const refVideo = React.useRef<HTMLVideoElement>(null);
 
+  // FilterModal에서 필터 변경 시 적용
   const changeFilterStatus = React.useCallback(
     (status: boolean, filter?: TFilter) => {
       if (filter) uiStore?.patchConfig({ filter });

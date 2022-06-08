@@ -13,6 +13,8 @@ type Props = {
 
 function Shutter({ dongbaekStore, refVideo, timer }: Props) {
   const [showTimer, setShowTimer] = React.useState<boolean>(false);
+
+  // 버튼 클릭 시, <canvas />에 사용자 video 화면 그리기 요청
   const onCapture = React.useCallback(() => {
     if (timer !== 0 && !showTimer) {
       setShowTimer(true);

@@ -3,7 +3,6 @@ import Body from "./Body";
 import Flash from "./Flash";
 import Printing from "./Printing";
 
-//Body
 function Polaroid() {
   return (
     <Wrapper>

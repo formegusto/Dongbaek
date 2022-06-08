@@ -20,6 +20,7 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
   const refList = React.useRef<HTMLDivElement>(null);
   const refLine = React.useRef<HTMLDivElement>(null);
 
+  // vertical scroll에 horizontal로 반응하도록
   React.useEffect(() => {
     if (refWrapper && refWrapper.current) {
       refWrapper.current.addEventListener("wheel", (e) => {
@@ -30,6 +31,7 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
     }
   });
 
+  // 스크롤 모니터링 동작
   React.useEffect(() => {
     if (refBlock && refBlock.current) {
       refBlock.current.addEventListener(
@@ -51,6 +53,7 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
     }
   }, []);
 
+  // 윈도운 resizing 발생 시, 뒤로가기 버튼, 심볼의 위치를 다시 잡기 위한 함수
   const resizingAdjustPosition = React.useCallback(() => {
     if (refBlock && refBlock.current) {
       if (
@@ -74,6 +77,7 @@ function MemoryComponent({ dongbaeks, onBack }: Props) {
     }
   }, []);
 
+  // 사진이 삭제될 경우, 라인의 크기도 같이 작아지게 하기 위한 함수
   const resizingLine = React.useCallback(() => {
     if (refList && refList.current) {
       const width = refList.current.scrollWidth;

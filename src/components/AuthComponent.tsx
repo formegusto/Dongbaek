@@ -36,6 +36,7 @@ function AuthComponent({
   const [viewAuth, setViewAuth] = React.useState<boolean>(false);
   const location = useLocation();
 
+  // 동백꽃 애니메이션
   React.useEffect(() => {
     if (refDongbaek && refDongbaek.current) {
       refDongbaek.current.addEventListener("animationend", () => {
@@ -73,6 +74,7 @@ function AuthComponent({
     }
   }, [refDongbaek, navigate, location]);
 
+  // 셔터 버튼 애니메이션
   React.useEffect(() => {
     if (loading) {
       if (refShutter && refShutter.current) {

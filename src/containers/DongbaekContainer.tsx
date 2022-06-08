@@ -11,6 +11,7 @@ type Props = {
 };
 
 function DongbaekContainer({ setStream, stream, auth }: Props) {
+  // Web Cam을 띄우기 위한 준비를 한다.
   React.useEffect(() => {
     if (auth) {
       if (stream) {

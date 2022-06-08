@@ -3,6 +3,7 @@ export type Filter = {
   className: string;
 };
 
+// CSSGram 필터 Form
 export default [
   {
     name: "Default",

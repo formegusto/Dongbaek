@@ -5,6 +5,7 @@ type Props = {
   filter?: Filter;
 };
 
+// 사용자의 필터 설정이 변화하면 현재 사용자의 필터가 어떤 필터인지 띄운다.
 function FilterObserver({ filter }: Props) {
   return (
     <FilterObserverShape>

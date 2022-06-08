@@ -10,6 +10,7 @@ type Props = {
 
 const TIMER_OPTINS = [0, 5, 10];
 
+// 타이머 설정
 function TimerSetting({ uiStore }: Props) {
   const updateTimer = React.useCallback(
     (option: number) => {

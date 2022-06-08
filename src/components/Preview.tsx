@@ -11,6 +11,7 @@ type Props = {
   dongbaekStore?: DongbaekStore;
 };
 
+// 미리보기 모달
 function Preview({ uiStore, dongbaekStore }: Props) {
   const [title, setTitle] = React.useState<string>("");
   const refContent = React.useRef<HTMLDivElement>(null);
@@ -18,12 +19,14 @@ function Preview({ uiStore, dongbaekStore }: Props) {
   const refPaper = React.useRef<HTMLFormElement>(null);
   const [endAni, setEndAni] = React.useState<boolean>(false);
 
+  // 저장 안하고 닫으면 스토어 초기화 및 priview 종료
   const onClose = React.useCallback(() => {
     uiStore?.setPreview(false);
     dongbaekStore?.clearImage();
     setTitle("");
   }, [uiStore, dongbaekStore]);
 
+  // 사용자가 저장 클릭 시, 집게 애니메이션 동작
   const onSubmit = React.useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();

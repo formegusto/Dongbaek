@@ -35,6 +35,7 @@ function DongbaekComponent() {
     elPolaroid.style.transform = "rotateY(" + -360 * rate + "deg)";
   }, []);
 
+  // 스크롤 시, 사진기가 돌아가도록 한다.
   React.useEffect(() => {
     window.addEventListener("scroll", scrollThrottle);
 

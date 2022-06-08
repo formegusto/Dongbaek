@@ -5,6 +5,7 @@ import { ResSkeleton } from "../../api/types";
 import { Config } from "../auth/types";
 import filters, { Filter } from "./filters";
 
+// UI 조작을 위한 Store
 class UIStore {
   stream?: MediaStream;
   filter: Filter;
@@ -31,6 +32,7 @@ class UIStore {
     this.filter = filter;
   };
 
+  // 사용자 촬영 설정 정보 조회
   *getConfig(): Generator<Promise<ResSkeleton<ResGetConfig>>, void, any> {
     try {
       const res = yield API["config"].getConfig();
@@ -45,6 +47,7 @@ class UIStore {
     }
   }
 
+  // 사용자 촬영 설정 정보 수정
   *patchConfig(config: Config): Generator<Promise<ResSkeleton>, void, any> {
     try {
       yield API["config"].patchConfig(config);

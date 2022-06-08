@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
+// Style Reset Code
 const GlobalStyles = createGlobalStyle`
     html {
         background-color: #121212;
