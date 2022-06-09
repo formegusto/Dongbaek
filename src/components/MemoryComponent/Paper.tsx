@@ -218,7 +218,7 @@ const PaperContent = styled.div`
       object-fit: cover;
     }
 
-    & > div {
+    & > .shadow {
       position: absolute;
       top: 0;
       left: 0;

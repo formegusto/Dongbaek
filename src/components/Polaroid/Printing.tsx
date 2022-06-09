@@ -40,6 +40,7 @@ function Printing({ dongbaekStore, uiStore }: Props) {
   return (
     <Block>
       <Paper ref={refPaper}>
+        <Shadow />
         <CaptureFigure className={uiStore?.filter.className}>
           <CaptureCanvas id="capture-canvas" />
         </CaptureFigure>
@@ -48,6 +49,19 @@ function Printing({ dongbaekStore, uiStore }: Props) {
     </Block>
   );
 }
+
+const Shadow = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  left: 18px;
+
+  width: 304px;
+  height: 200px;
+
+  box-shadow: rgba(51, 51, 51, 0.5) 3px 3px 10px inset;
+  transition: 0.25s;
+`;
 
 const CaptureFigure = styled.figure`
   width: 304px;

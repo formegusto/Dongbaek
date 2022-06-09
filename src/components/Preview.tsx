@@ -72,6 +72,7 @@ function Preview({ uiStore, dongbaekStore }: Props) {
           }
           ref={refPaper}
         >
+          <Shadow />
           <figure className={uiStore?.filter.className}>
             {dongbaekStore?.image && (
               <img src={dongbaekStore?.image!} alt="pure one day" />
@@ -104,6 +105,19 @@ function Preview({ uiStore, dongbaekStore }: Props) {
     <></>
   );
 }
+
+const Shadow = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  left: 24px;
+
+  width: 330px;
+  height: 220px;
+
+  box-shadow: rgba(51, 51, 51, 0.5) 3px 3px 10px inset;
+  transition: 0.25s;
+`;
 
 const AniTongFront = keyframes`
   from {
