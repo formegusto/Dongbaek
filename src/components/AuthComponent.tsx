@@ -83,11 +83,14 @@ function AuthComponent({
     } else {
       if (refShutter && refShutter.current) {
         refShutter.current.classList.remove("loading");
-        if (error) {
-          refShutter.current.classList.add("error");
-        }
+        if (error) refShutter.current.classList.add("error");
       }
     }
+
+    // if (refShutter && refShutter.current) {
+    //   if (refShutter.current.classList.contains("loading"))
+    //     if (error) refShutter.current.classList.add("error");
+    // }
   }, [loading, error]);
 
   React.useEffect(() => {
@@ -96,11 +99,14 @@ function AuthComponent({
         "transitionend",
         () => {
           if (refShutter && refShutter.current) {
-            if (refShutter.current.classList.contains("error")) {
+            if (
+              !refShutter.current.classList.contains("loading") &&
+              refShutter.current.classList.contains("error")
+            ) {
               refShutter.current.classList.remove("error");
               setTimeout(() => {
                 errorCheck!();
-              }, 2000);
+              }, 1000);
             }
           }
         },
@@ -135,7 +141,7 @@ function AuthComponent({
           ref={refAuthForm}
           isView={viewAuth}
           onSubmit={
-            loading
+            loading || error
               ? (e) => {
                   e.preventDefault();
                 }
@@ -312,7 +318,7 @@ const Shutter = styled.button`
 
   &.error {
     &::after {
-      transition: 0.3s;
+      transition: 1s;
       border-radius: 4px;
 
       transform: scale(0.75);

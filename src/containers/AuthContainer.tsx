@@ -80,9 +80,8 @@ function AuthContainer({ store }: Props) {
       setTimeout(() => {
         setLoading(false);
 
-        if (refDongbaek && refDongbaek.current) {
+        if (refDongbaek && refDongbaek.current)
           refDongbaek.current.classList.add("success");
-        }
       }, 2000);
     }
   }, [store, store?.token, navigate, loading]);
@@ -94,7 +93,7 @@ function AuthContainer({ store }: Props) {
         setLoading(false);
       }, 2000);
     }
-  }, [store?.error]);
+  }, [store, store?.error]);
 
   return (
     <AuthComponent

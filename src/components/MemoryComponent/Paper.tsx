@@ -229,6 +229,9 @@ const PaperContent = styled.div`
       box-shadow: rgba(51, 51, 51, 0.5) 3px 3px 10px inset;
       transition: 0.25s;
       /* background-color: rgba(51, 51, 51, 0.3); */
+
+      transform-origin: 50% 50%;
+      transform: rotateY(180deg);
     }
   }
 
